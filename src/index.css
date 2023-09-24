@@ -1,0 +1,97 @@
+h1 {
+  font-size: 40px;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 0;
+  max-width: 450px;
+  margin: auto;
+  margin-bottom: 0;
+  position: sticky;
+  top: 3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.mapa-container {
+  position: relative;
+}
+html {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow: hidden;
+}
+
+html,
+body,
+#map,
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+
+.App {
+  background: linear-gradient(rgba(92,192,192,0.3), rgba(20,20,20, .9)), url('./images/fondo.jpg');
+  background-color: gainsboro;
+  background-repeat: repeat-y;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.layout .btn {
+  position: relative;
+  top: 25px; 
+  left: 700px;
+  right: 1px;
+}
+
+
+/* Color of the links BEFORE scroll */
+.navbar-scroll .nav-link,
+.navbar-scroll .fa-bars,
+.navbar-scroll .navar-brand {
+  color: #4f4f4f;
+}
+
+.navbar-scroll .nav-link:hover {
+  color: hsla(0, 0%, 100%, 0);
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .fa-bars,
+.navbar-scrolled .navar-brand {
+  color: #4f4f4f;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scroll,
+.navbar-scrolled {
+  background-color: #fff;
+}
+
+.navbar-collapse {
+  flex-basis: 100%;
+  align-items: center;
+}
+
+/* An optional height of the navbar AFTER scroll */
+.navbar-collapse {
+  flex-basis: 100%;
+  flex-grow: 0;
+  align-items: center;
+}
+
+body {
+  background-color: #eee;
+}
+.map-container {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
