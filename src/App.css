@@ -4,6 +4,14 @@
   padding: 0rem;
   text-align: center;
 }
+/* En tu archivo CSS */
+.h2-style {
+  color: tuColorParaH2;
+}
+
+.p-style {
+  color: tuColorParaP;
+}
 
 .logo {
   position: absolute;

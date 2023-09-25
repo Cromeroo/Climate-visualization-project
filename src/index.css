@@ -33,9 +33,19 @@ body {
   margin: 0;
 }
 
+/* En tu archivo CSS */
+.h2-style {
+  color:#eee;
+}
+
+.p-style {
+  color:aliceblue;
+}
+
+
 
 .App {
-  background: linear-gradient(rgba(92,192,192,0.3), rgba(20,20,20, .9)), url('./images/fondo.jpg');
+  background: linear-gradient(rgba(117, 185, 185, 0.3), rgba(20,20,20, .9)), url('./images/fondo.jpg');
   background-color: gainsboro;
   background-repeat: repeat-y;
   background-position: center;
