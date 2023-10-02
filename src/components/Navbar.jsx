@@ -18,9 +18,9 @@ function MyNavbar() {
         <Nav className="me-auto" style={{gap: '20px'}}> 
           <Nav.Link href="/proyecto">Proyecto</Nav.Link>
             <Nav.Link href="/territorios">Territorios</Nav.Link>
-            <Nav.Link href="#pets">Espacios de cocreación</Nav.Link>
-            <Nav.Link href="#adoptins">Variedad climatica</Nav.Link>
-            <Nav.Link href="#adoptions">Indicadores climaticos</Nav.Link>
+            <Nav.Link href="/espacios">Espacios de cocreación</Nav.Link>
+            <Nav.Link href="#adoptins">Variabilidad climática</Nav.Link>
+            <Nav.Link href="#adoptions">Indicadores climáticos</Nav.Link>
           </Nav>
         </Navbar.Collapse>
 

@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Proyecto from './Pages/proyecto';
 import Territorios from './Pages/territorios';
 import HomePage from './Pages/HomePage.jsx';
+import Espacios from './Pages/Espacios';
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +19,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/proyecto" element={<Proyecto />} />
           <Route path="/territorios" element={<Territorios />} />
+          <Route path="/espacios" element={<Espacios />} />
+
         </Routes>
       </Layout>
     </BrowserRouter>
