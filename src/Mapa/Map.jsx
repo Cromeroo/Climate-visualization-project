@@ -47,6 +47,7 @@ function MapComponent() {
       })
     });
   }
+  
 
   function addMapLayer(data) {
     if (data.errMsg) {

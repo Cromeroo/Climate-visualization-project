@@ -11,13 +11,3 @@ export const testApiCall = async () => {
     throw error;
   }
 };
-
-export const getLayer = async (layerName) => {
-  try {
-    const response = await axios.get(`${BASE_URL}layer/${layerName}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error making API call', error);
-    throw error;
-  }
-};
