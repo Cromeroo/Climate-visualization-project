@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 
 function MyNavbar() {
   return (
-    <div>
-    <h1><Link to="/">Territorio comida y vida</Link></h1>
+    <div style={{ padding: "20px" }}>
+      <h1 className="my-title"><Link to="/">Territorio comida y vida</Link></h1>
 
     <Navbar bg="transparent" expand="lg" style={{fontSize: '20px'}} >
       <Container style={{justifyContent: 'center'}}>

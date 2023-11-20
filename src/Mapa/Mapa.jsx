@@ -1,157 +1,110 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import 'ol/ol.css';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import OSM from 'ol/source/OSM';
-import TileLayer from 'ol/layer/Tile';
+import toolbox from './toolbox'; 
 
-import XYZ from 'ol/source/XYZ';
-import { transform } from 'ol/proj';
-import Draw from 'ol/interaction/Draw';
-import { Vector as VectorSource } from 'ol/source';
-import { Vector as VectorLayer } from 'ol/layer';
-import { Circle, Fill, Stroke, Style } from 'ol/style';
+function MapComponent({ layerType }) { // Recibiendo layerType como prop
+  const layerTypeRef = useRef(layerType);
 
-import { testApiCall } from './ApiService';
-import MapContainer from './MapContainer';
+  // Actualizar el ref cada vez que layerType cambie
+  useEffect(() => {
+    layerTypeRef.current = layerType;
+  }, [layerType]);
 
+  const api_url = "http://127.0.0.1:5000/";
+  const mapRef = useRef(null);  // Referencia para mantener el objeto mapa
+  const drawRef = useRef(null); // Referencia para mantener el objeto de dibujo
 
-function MapComponent() {
-  let map;
-  let draw;
+  useEffect(() => {
+    loadMap("map", ol.proj.transform([-77.0197, 2.7738], 'EPSG:4326', 'EPSG:3857'), 8);
+  }, []);
 
-  const loadMap = (target, center, zoom) => {
-    const raster = new TileLayer({
-      source: new OSM()
+  function loadMap(target, center, zoom) {
+    const raster = new ol.layer.Tile({
+      source: new ol.source.OSM()
     });
-
-    map = new Map({
+    mapRef.current = new ol.Map({
       layers: [raster],
       target: target,
-      view: new View({
+      view: new ol.View({
         center: center,
         zoom: zoom
       })
     });
-  };
 
-  const addTileServerURL = (url, layerID) => {
-    console.log("Adding tile layer with URL:", url, "and ID:", layerID);
-    const geeLayer = new TileLayer({
-      source: new XYZ({
-        url: url
-        
-      }),
-      id: layerID
-      
+    // Agregar funcionalidad de dibujo
+    addDrawFunctionality(mapRef.current);
+  }
+
+  function addDrawFunctionality(map) {
+    const source = new ol.source.Vector({wrapX: false});
+    const vector = new ol.layer.Vector({
+      source: source
     });
-    
-
-    map.addLayer(geeLayer);
-  };
-  const sendPolygonCoordinatesToBackend = async (coordinates) => {
-    try {
-        const transformedCoordinates = coordinates[0].map(coord => transform(coord, 'EPSG:3857', 'EPSG:4326'));
-        console.log(transformedCoordinates);
-        const payload = JSON.stringify({ coordinates: transformedCoordinates });
-        const response = await fetch('http://localhost:5000/coords', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: payload
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-        if (data.tile_url) {
-            // Función para remover una capa por ID
-            const removeLayerByID = (layerID) => {
-                const layerToRemove = map.getLayers().getArray().find(layer => layer.get('id') === layerID);
-                if (layerToRemove) {
-                    map.removeLayer(layerToRemove);
-                }
-            };
-
-            // Llamar a removeLayerByID antes de añadir la nueva capa
-            removeLayerByID("serverLayer");
-
-            // Ahora añade la nueva capa
-            addTileServerURL(data.tile_url, "serverLayer");
-
-            // Llevar la nueva capa al frente
-            const layer = map.getLayers().getArray().find(layer => layer.get('id') === "serverLayer");
-            if (layer) {
-                map.removeLayer(layer);
-                map.addLayer(layer);
-            }
-        }
-    } catch (error) {
-        console.error('Error sending coordinates:', error);
-    }
-};
-
-
-
-
-  const addDrawingLayer = () => {
-    const source = new VectorSource();
-    const vector = new VectorLayer({
-      source: source,
-      style: new Style({
-        fill: new Fill({
-          color: 'rgba(255, 255, 255, 0.2)',
-        }),
-        stroke: new Stroke({
-          color: '#ffcc33',
-          width: 2,
-        }),
-        image: new Circle({
-          radius: 7,
-          fill: new Fill({
-            color: '#ffcc33',
-          }),
-        }),
-      }),
-    });
-
     map.addLayer(vector);
-    draw = new Draw({
+
+    const draw = new ol.interaction.Draw({
       source: source,
       type: 'Polygon',
+      contrast: 0.2
     });
+
+    drawRef.current = draw;
+    map.addInteraction(draw);
 
     draw.on('drawend', (event) => {
       const coordinates = event.feature.getGeometry().getCoordinates();
-      sendPolygonCoordinatesToBackend(coordinates);
+      const transformedCoords = coordinates[0].map(coord => ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326'));
+      
+      // Llamar a la función con las coordenadas y el tipo de capa actual
+      sendPolygonToServer(transformedCoords);
     });
+  }
+  
+  function sendPolygonToServer(coordinates) {
+    const endpoint = layerTypeRef.current === 'coords' ? "coords" : "precipitation";
 
-    map.addInteraction(draw);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        loadMap("map", transform([-77.297333, 2.570868], 'EPSG:4326', 'EPSG:3857'), 7);
-        const data = await testApiCall();
-        if (data.errMsg) {
-          console.info(data.errMsg);
-        } else if (data.url) {
-          addTileServerURL(data.url, "geeLayer");
-        } else {
-          console.warn("Wrong Data Returned");
-        }
-        addDrawingLayer();
-      } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
+    console.log(`Sending to endpoint: ${endpoint}`);
+    console.log(`Coordinates being sent:`, coordinates);
+    fetch(api_url + endpoint, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ coordinates: coordinates })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.url) {
+        addTileServerURL(data.url, "userLayer");
       }
-    };
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  }
 
-    fetchData();
-  }, []);
+  function addTileServerURL(url, layerID) {
+    if (typeof url !== "string") {
+      console.error("Invalid URL type:", typeof url);
+      return;
+    }
+    var geeLayer = new ol.layer.Tile({
+      source: new ol.source.XYZ({
+        url: url
+      }),
+      id: layerID,
+      opacity: 0.7
+    });
+    mapRef.current.addLayer(geeLayer);
+  }
 
-  return <MapContainer />;
+  // Agregar un selector para el tipo de capa antes del mapa
+  return (
+    <>
+
+      <div id="map" style={{ width: '100%', height: '400px' }}></div>
+    </>
+  );
 }
 
 export default MapComponent;

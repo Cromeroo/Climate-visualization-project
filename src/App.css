@@ -1,5 +1,91 @@
+.text-justify {
+  text-align: justify;
+}
+
+.bdy{
+  width:85%;
+  margin: 0 auto;
+  
+  padding: 0rem;
+  text-align: center;
+}
+
+.bdy2{
+
+  max-width: 60%;
+  position: relative;
+  margin-left: 30%;
+}
+
+.bdy3{
+  width:85%;
+  margin: 0 auto;
+  max-width: 40%;
+  margin-right: 20%;
+}
+.bdy4{
+  top:0%;
+  max-width: 40%;
+  position: relative;
+  margin-right: 20%;
+}
+.cont{
+  width:80%;
+  margin: 0 auto;
+
+  padding: 0rem;
+  text-align: center;
+}
+
+
+.homepage-container {
+  display: flex;
+}
+.translate-middle-y {
+  transform: translateY(-40%)!important;
+}
+
+.start-0 {
+  left: 10%;
+}
+
+.toolbox {
+  display: block;
+  flex-direction: column;
+  width: 17%;
+  left: 270px;
+  height: 45.9%;
+  top: 38%;
+  transform: translateY(100%);
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  transition: border-radius 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3);
+}
+
+
+.date-section,
+.layer-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.date-section > label,
+.date-section > input,
+.layer-section > label,
+.layer-section > select {
+  margin-right: 10px;
+}
+
+
+.map-wrapper {
+  flex: 3;
+}
+
+
 #root {
-  max-width: 1280px;
+  width: 90%;
   margin: 0 auto;
   padding: 0rem;
   text-align: center;
@@ -16,12 +102,52 @@
 .logo {
   position: absolute;
   top: 0;
-  right: 1550px;
   left: revert;
   width: 7rem;
+  height: auto;  /* Esto mantiene la proporción del logo */
+  display: block;
+  margin: 0 auto;  /* Centra el logo horizontalmente */
+  }
+  /* Si la pantalla tiene menos de 600px de ancho, ajusta el tamaño del logo */
+@media (max-width: 600px) {
+  .logo {
+    width: 100px;
+  }
 }
+
+/* Si la pantalla tiene menos de 400px de ancho, ajusta aún más el tamaño del logo */
+@media (max-width: 400px) {
+  .logo {
+    width: 50px;
+  }
+}
+.my-title {
+  margin-bottom: 60px;
+  position: absolute;
+  font-size: 2em; /* Tamaño inicial, ajústalo a tu gusto */
+  text-align: center; /* Centra el texto horizontalmente */
+}
+/* Para pantallas medianas */
+@media (max-width: 768px) {
+  .my-title {
+    font-size: 1.5em; /* Tamaño de fuente más pequeño para pantallas medianas */
+  }
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 576px) {
+  .my-title {
+    font-size: 1.2em; /* Tamaño de fuente aún más pequeño para pantallas pequeñas */
+  }
+}
+
+
 .mapa-container {
   position: relative;
+}
+
+.border {
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
 }
 
 .p-4 border rounded{
@@ -45,7 +171,7 @@
 }
 /* Color of the links BEFORE scroll */
 .navbar-scroll .nav-link,
-.navbar-scroll .fa-bars,
+.navbar-scroll .fa-barFs,
 .navbar-scroll .navar-brand {
   color: #4f4f4f;
 }
@@ -75,11 +201,6 @@
 
 body {
   background-color: #eee;
-}
-html {
-  overflow-y: hidden;
-  overflow-x: hidden;
-  overflow: hidden;
 }
 
 html,
@@ -112,16 +233,7 @@ body {
   width: 100%;
 }
 
-#overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: black url(../img/loading.gif) center center no-repeat;
-  opacity: 0.5;
-  top: 0;
-  left: 0;
-  z-index: 200;
-}
+
 
 /*
  * Sidebar
@@ -250,3 +362,19 @@ body {
     width: unset;
   }
 }
+.my-title {
+  font-size: 34px;  /* Default size for larger screens */
+}
+
+@media (max-width: 600px) {
+  .my-title {
+    font-size: 20px;  /* Adjusted size for medium screens */
+  }
+}
+
+@media (max-width: 400px) {
+  .my-title {
+    font-size: 16px;  /* Adjusted size for smaller screens */
+  }
+}
+

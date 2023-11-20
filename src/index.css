@@ -14,19 +14,15 @@ h1 {
 .mapa-container {
   position: relative;
 }
-html {
-  overflow-y: hidden;
-  overflow-x: hidden;
-  overflow: hidden;
-}
+
+
 
 html,
-body,
-#map,
-.map {
-  height: 100%;
+body {
+  min-height: 100%;
   width: 100%;
 }
+
 
 body {
   padding: 0;
