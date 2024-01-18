@@ -1,5 +1,5 @@
 import React from 'react';
-import Mapa from '../Mapa/Mapa';
+import Mapa from '../Mapa/mapab';
 
 function HomePage() {
   return (

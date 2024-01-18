@@ -34,6 +34,8 @@ function MapComponent() {
 
   let map;
 
+
+
   function loadMap(target, center, zoom) {
     const raster = new ol.layer.Tile({
       source: new ol.source.OSM()
@@ -47,6 +49,7 @@ function MapComponent() {
       })
     });
   }
+  
 
   function addMapLayer(data) {
     if (data.errMsg) {
