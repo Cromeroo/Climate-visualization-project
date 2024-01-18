@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css'; // Importa otros estilos CSS locales si es necesario
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './components/Navbar';
+
 import Layout from './components/Layout';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Proyecto from './Pages/proyecto';

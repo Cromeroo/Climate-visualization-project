@@ -1,42 +1,49 @@
 import React, { useState } from 'react';
-import Mapa from '../Mapa/layercontrol';
-import Toolbox from '../Mapa/toolbox';
-import Mapa2 from '../Mapa/Mapa';
+import Mapa from '../Mapa/Mapa';
+import Tiempo from '../Mapa/tiempo';
+import LayerSelector from '../Mapa/LayerSelector';
+import Map from '../Mapa/Map';
 
 function HomePage() {
-  // Estado compartido para la capa seleccionada
-  const [selectedLayer, setSelectedLayer] = useState('');
+  const [layerType, setLayerType] = useState('coords');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  // Función para actualizar la capa seleccionada
-  const handleLayerChange = (layer) => {
-    console.log("Capa seleccionadaaa:", layer);
-    setSelectedLayer(layer);
+  const changeLayer = (event) => {
+    setLayerType(event.target.value);
   };
+  
+  const changeStartDate = (newDate) => {
+    setStartDate(newDate);
+  };
+
+  const changeEndDate = (newDate) => {
+    setEndDate(newDate);
+  };
+
   return (
-    <div>
-      
-      <div className="bdy3">
-      <Toolbox onLayerSelect={handleLayerChange} />
-      </div>
+    <>
+
+      <LayerSelector 
+        layerType={layerType} 
+        changeLayer={changeLayer} 
+        startDate={startDate} 
+        changeStartDate={changeStartDate}
+        endDate={endDate}
+        changeEndDate={changeEndDate} 
+      />
       <div className="p-4 border rounded, bdy2">
-      <Mapa2/>
+        <Mapa layerType={layerType} startDate={startDate} endDate={endDate} />
       </div>
-      <div className="cont">
-        <h2 className="text-center h2-style">La importancia de los sistemas agroalimentarios</h2>
-        <p className="text-justify p-style ">
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-        </p>
+        <div>
+          <div className="cont">
+          <Tiempo />
+          </div>
+
       </div>
-    </div>
+
+      
+    </>
   );
 }
 

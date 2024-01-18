@@ -1,11 +1,15 @@
 import React from 'react';
-import Mapa from '../Mapa/mapab';
+import Mapa from '../Mapa/layercontrol';
+import Drawer from '../components/drawer';
 
 function HomePage() {
   return (
     <div>
+      <div className="cont">
+      <Drawer />
+      </div>
       <div className="p-4 border rounded">
-        <Mapa />
+        <Mapa  style={{ width: '500px' }}/>
       </div>
       <div className="cont">
         <h2 className="text-center h2-style">La importancia de los sistemas agroalimentarios</h2>

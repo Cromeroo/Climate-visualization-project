@@ -1,5 +1,82 @@
+.minimize-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Verde */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: none; /* Oculta el botón por defecto */
+}
+
+.minimize-button:hover {
+  background-color: #1e5f20; /* Un verde más oscuro */
+}
+@media (max-width: 1200px) {
+
+  .minimize-button {
+    margin-left: 50px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center; /* Mostrar botón en pantallas <= 1200px */
+  }
+}
+@media (max-width: 600px) { /* Ajusta este valor según tus necesidades */
+  .minimize-button {
+    display: block; /* Muestra el botón en pantallas pequeñas */
+    /* Otros estilos responsivos si son necesarios */
+  }
+}
+
+
+
 .text-justify {
   text-align: justify;
+}
+
+/* TextSlider.css */
+.text-slider-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.text-slider-content {
+  margin: 10px;
+  padding: 20px;
+  border: 3px solid #ccc;
+}
+.text-slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.text-slider-content {
+  margin: 0 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  min-width: 200px; /* Ajusta según necesidad */
+  text-align: center;
+}
+.text-slider-content {
+  margin: 0 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  min-width: 200px; /* Ajusta según necesidad */
+  text-align: center;
+  background-color: rgba(37, 36, 36, 0.5); /* Gris con 50% de transparencia */
+}
+
+.arrow-button {
+  background-color: transparent;
+  border: 2px;
+  font-size: 40px;
+  cursor: pointer;
+  color: azure;
 }
 
 .bdy{
@@ -12,7 +89,7 @@
 
 .bdy2{
 
-  max-width: 60%;
+  width: 60%;
   position: relative;
   margin-left: 30%;
 }
@@ -48,8 +125,11 @@
 .start-0 {
   left: 10%;
 }
+/* En tu archivo CSS
 
 .toolbox {
+  position:absolute;
+  z-index: 10;
   display: block;
   flex-direction: column;
   width: 17%;
@@ -62,8 +142,54 @@
   transition: border-radius 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3);
 }
+ */
+
+.toolbox {
+  position:absolute;
+  z-index:1;
+  left: 270px;
+  width: 50%;
+  height: 46%;
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3);
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+.contenedor{
+  display: flex;
+
+}
+
+.auto-slider-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%; /* Adjust height as needed */
+}
+
+.auto-slider-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
 
 
+.toolbox button {
+  padding: 5px 10px;
+  margin-top: 10px;
+  border: none;
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+}
+.toolbox:hover {
+  background-color: #eaeaea94;
+  transition: background-color 0.3s;
+}
 .date-section,
 .layer-section {
   display: flex;
@@ -98,12 +224,153 @@
 .p-style {
   color: tuColorParaP;
 }
+.contenedor-imagen {
+  position: relative;
+  overflow: hidden;
+
+}
+
+.contenedor-imagen img {
+  width: 100%; 
+  height: auto; 
+}
+
+.texto-sobre-imagen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Color del texto */
+  text-shadow: 
+      -1px -1px 0 #000,  
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000; /*   width: 200px;
+}
+.p2 {
+  position: absolute;
+  width: 10%;        /* Ancho del texto como porcentaje del contenedor */
+  margin: auto;   
+  font-size: 1.0em; /* Default font size */
+  text-align: justify;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; 
+  width: 400px;
+    color: white; /* Color del texto */
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000; /* Contorno negro */
+        
+
+}
+@media (max-width: 768px){
+  .p2 {
+    position: absolute;
+    width: 10%;        /* Ancho del texto como porcentaje del contenedor */
+    margin: auto;   
+    font-size: 0.5em; /* Default font size */
+    text-align: justify;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; 
+    width: 400px;
+      color: white; /* Color del texto */
+      text-shadow: 
+          -1px -1px 0 #000,  
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+          1px 1px 0 #000; /* Contorno negro */
+          
+  
+  }
+  
+}
+
+/* AutoSlidingContainer.css */
+
+/* Styles for the slide container */
+.slide-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Styles for the image */
+.slide-image {
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Styles for the text overlay */
+.slide-text {
+  font-size: 1.4em; 
+  color: white; /* Color del texto */
+  text-shadow: 
+      -1px -1px 0 #000,  
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000; 
+  position: absolute;
+  top: 90px;
+  text-align: justify;
+  left: 20px;
+  width: 340px;
+} 
+@media (max-width: 600px) {
+  .slide-text{
+    width: 160px;
+    font-size: 0.6em; 
+    top: 8px;
+  }
+  
+}
+
+
+.track {
+ top: 30px;
+ display: flex;
+ position: absolute;
+ align-items: center;
+ padding: 15px 0;
+ width: 100%;
+ height: 100%;
+ background-repeat: no-repeat;
+ background-position: center;
+ background-size: cover;
+ z-index: 5;
+ box-sizing: border-box;
+}
+/* Custom styles for slick dots */
+.track .slick-dots li button:before {
+  font-size: 16px;
+  color: #ff0000; /* Red color for dots */
+}
+
+.track .slick-dots li.slick-active button:before {
+  color: #00ff00; /* Green color for active dot */
+}
+
+
+
+.drawert {
+  width:80%;
+  margin: 0 auto;
+
+  padding: 0rem;
+  text-align: center;
+}
+
 
 .logo {
   position: absolute;
-  top: 0;
+  top: -3px;
   left: revert;
-  width: 7rem;
+  width: 8rem;
   height: auto;  /* Esto mantiene la proporción del logo */
   display: block;
   margin: 0 auto;  /* Centra el logo horizontalmente */
@@ -121,11 +388,12 @@
     width: 50px;
   }
 }
+
 .my-title {
-  margin-bottom: 60px;
   position: absolute;
-  font-size: 2em; /* Tamaño inicial, ajústalo a tu gusto */
-  text-align: center; /* Centra el texto horizontalmente */
+  font-size: 39px;  /* Default size for larger screens */
+  text-align: center; 
+  text-decoration: none !important;
 }
 /* Para pantallas medianas */
 @media (max-width: 768px) {
@@ -144,7 +412,22 @@
 
 .mapa-container {
   position: relative;
+  z-index: 1; /* Menor z-index para asegurar que LayerSelector se sobreponga */
+
 }
+.contenedor {
+  position: relative;
+}
+
+.layer-selector {
+  position: absolute;
+  z-index: 10;
+  /* Ajusta top, right, bottom, left según sea necesario */
+  top: 0;
+  left: 0;
+}
+
+
 
 .border {
   border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color)!important;
@@ -162,9 +445,6 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
 
 .read-the-docs {
   color: #888;
@@ -362,13 +642,12 @@ body {
     width: unset;
   }
 }
-.my-title {
-  font-size: 34px;  /* Default size for larger screens */
-}
+
 
 @media (max-width: 600px) {
   .my-title {
-    font-size: 20px;  /* Adjusted size for medium screens */
+    font-size: 25px;
+    margin: 0;  /* Adjusted size for medium screens */
   }
 }
 
@@ -376,5 +655,103 @@ body {
   .my-title {
     font-size: 16px;  /* Adjusted size for smaller screens */
   }
+}
+
+
+.cardContainer {
+  width: fit-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  position: relative;
+  width: 220px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(30px);
+  background-color: rgba(7, 7, 7, 0.308);
+  border: 1px solid rgba(255, 255, 255, 0.089);
+  cursor: pointer;
+}
+
+.city {
+  font-weight: 700;
+  font-size: 0.9em;
+  letter-spacing: 1.2px;
+  color: white;
+}
+
+.weather {
+  font-weight: 500;
+  font-size: 0.7em;
+  letter-spacing: 1.2px;
+  color: rgb(197, 197, 197);
+}
+
+.temp {
+  font-size: 1.8em;
+  color: white;
+}
+
+.minmaxContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.min,
+.max {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0px 20px;
+  gap: 4px;
+}
+
+.max {
+  align-items: flex-start;
+  border-left: 2px solid white;
+}
+
+.maxHeading,
+.minHeading {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: white;
+}
+
+.maxTemp,
+.minTemp {
+  font-size: 0.6em;
+  font-weight: 500;
+  color: rgb(197, 197, 197);
+}
+
+.cardContainer::before {
+  width: 100px;
+  height: 100px;
+  content: "";
+  position: absolute;
+  background-color: rgb(144, 161, 255);
+  z-index: -1;
+  border-radius: 50%;
+  left: 100px;
+  top: 50px;
+  transition: all 1s;
+}
+
+.cardContainer:hover::before {
+  transform: translate(-50px, 50px);
 }
 

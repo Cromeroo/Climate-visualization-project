@@ -3,10 +3,10 @@ import MyButton from './Button';
 
 
 export default function Layout({children}) {
-
+//<MyButton />
   return (
     <div className="layout">
-       <MyButton />
+        
         <img src={logo} className="logo" />
       {children}
     </div>

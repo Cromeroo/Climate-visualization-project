@@ -1,34 +1,62 @@
-import React, { useState, useCallback } from 'react';
-import Toolbox from './toolbox';
-import LayerControl from './layercontrol';
+import React, { useState } from 'react';
 
-const YourComponent = () => {
-  const [geometry, setGeometry] = useState(null);
-  const [dates, setDates] = useState({ startDate: null, endDate: null });
-  const [timeSeriesData, setTimeSeriesData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+function TimeSeriesIndexComponent() {
+    const [imageName, setImageName] = useState('');
+    const [drawnPolygon, setDrawnPolygon] = useState('');
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    const [bandSelector, setBandSelector] = useState('');
+    const [reducer, setReducer] = useState('');
+    const [scale, setScale] = useState('');
 
-  // Suponiendo que LayerControl llama a una función prop cuando se dibuja/actualiza la geometría
-  const handleGeometryChange = useCallback((newGeometry) => {
-    setGeometry(newGeometry);
-  }, []);
+    const timeSeriesIndex = async () => {
+        const theJson = {
+            collectionNameTimeSeries: imageName,
+            geometry: JSON.parse(drawnPolygon),
+            dateFromTimeSeries: fromDate,
+            dateToTimeSeries: toDate,
+            indexName: bandSelector,
+            reducer: reducer,
+            scale: scale,
+        };
 
-  // Suponiendo que Toolbox llama a una función prop cuando se seleccionan/actualizan las fechas
-  const handleDateChange = useCallback((startDate, endDate) => {
-    setDates({ startDate, endDate });
-  }, []);
+        try {
+            const response = await fetch(api_url + 'timeSeriesIndex', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(theJson)
+            });
 
-  // Combinar la geometría y las fechas para hacer la llamada a la API
-  // ...
+            const data = await response.json();
+            if (data.errMsg) {
+                console.info(data.errMsg);
+            } else {
+                if (data.hasOwnProperty("timeseries")) {
+                    createChart('timeSeriesIndex', data.timeseries); // Asegúrate de que createChart esté definido
+                } else {
+                    console.warn("Wrong Data Returned");
+                    console.log(data);
+                }
+            }
+        } catch (error) {
+            console.warn(error);
+            // Manejar el error
+        }
+    };
 
-  return (
-    <div>
-      <Toolbox onDateChange={handleDateChange} />
-      <LayerControl onGeometryChange={handleGeometryChange} />
-      {/* ... */}
-    </div>
-  );
-};
+    return (
+        <div>
+ <h2 className="text-center h2-style">Historico de Datos</h2>
 
-export default YourComponent;
+        <div className="container mt-4 p-4 border rounded" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+            <div id="chartContainer" style={{ width: '40%', height: '200px' }}>
+                {/* Aquí se renderizará la gráfica */}
+            </div>
+        </div>
+        </div>
+    );
+}
+
+export default TimeSeriesIndexComponent;

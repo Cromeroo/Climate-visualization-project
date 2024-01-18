@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import 'ol/ol.css';
-import toolbox from './toolbox'; 
 
-function MapComponent({ layerType }) { // Recibiendo layerType como prop
+function MapComponent({ layerType,startDate,endDate }) { 
+  console.log(`Sending: ${startDate}`);
+  console.log(`Sending: ${endDate}`);
+
+
+  // Recibiendo layerType como prop
   const layerTypeRef = useRef(layerType);
 
   // Actualizar el ref cada vez que layerType cambie
   useEffect(() => {
     layerTypeRef.current = layerType;
   }, [layerType]);
+
 
   const api_url = "http://127.0.0.1:5000/";
   const mapRef = useRef(null);  // Referencia para mantener el objeto mapa
