@@ -60,7 +60,7 @@ function LayerSelector({  layerType, changeLayer, startDate, changeStartDate, en
           <label className="form-label">Capa:</label>
           <select className="form-select" onChange={changeLayer} value={layerType}>
             <option value="coords">Temperatura</option>
-            <option value="precipitation">Precipitación</option>
+            <option value="process_geojson">Precipitación</option>
           </select>
         </div>
       </div>

@@ -1,27 +1,61 @@
 import React, { useEffect, useRef } from 'react';
 import 'ol/ol.css';
+import { Map, View } from 'ol';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+
 
 function MapComponent({ layerType,startDate,endDate }) { 
   console.log(`Sending: ${startDate}`);
   console.log(`Sending: ${endDate}`);
 
 
-  // Recibiendo layerType como prop
   const layerTypeRef = useRef(layerType);
+  const vectorLayerRef = useRef(null);
 
-  // Actualizar el ref cada vez que layerType cambie
+
   useEffect(() => {
     layerTypeRef.current = layerType;
   }, [layerType]);
 
 
   const api_url = "http://127.0.0.1:5000/";
-  const mapRef = useRef(null);  // Referencia para mantener el objeto mapa
-  const drawRef = useRef(null); // Referencia para mantener el objeto de dibujo
+  const mapRef = useRef(null);  
+  const drawRef = useRef(null);
+  const geojsonLayerRef = useRef(); 
+
 
   useEffect(() => {
     loadMap("map", ol.proj.transform([-77.0197, 2.7738], 'EPSG:4326', 'EPSG:3857'), 8);
+
   }, []);
+  useEffect(() => {
+
+  fetch('http://127.0.0.1:5000/process_geojson')
+  .then(response => response.json())
+  .then(geojsonData => {
+    // Crear una fuente vectorial con los datos GeoJSON
+    const vectorSource = new ol.source.Vector({
+      features: new ol.format.GeoJSON().readFeatures(geojsonData, {
+        dataProjection: 'EPSG:4326',  // Asegúrese de que esto coincida con la proyección de sus datos GeoJSON
+        featureProjection: 'EPSG:3857' // Proyección del mapa
+      })
+    });
+
+    // Crear una capa vectorial con la fuente
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource
+    });
+
+    // Agregar la capa al mapa
+    mapRef.current.addLayer(vectorLayer);
+  })
+  .catch(error => {
+    console.error('Error al cargar los datos GeoJSON:', error);
+  });
+}, []);
 
   function loadMap(target, center, zoom) {
     const raster = new ol.layer.Tile({
@@ -31,8 +65,8 @@ function MapComponent({ layerType,startDate,endDate }) {
       layers: [raster],
       target: target,
       view: new ol.View({
-        center: center,
-        zoom: zoom
+          center: center,
+          zoom: zoom
       })
     });
 
@@ -106,7 +140,7 @@ function MapComponent({ layerType,startDate,endDate }) {
   // Agregar un selector para el tipo de capa antes del mapa
   return (
     <>
-
+      
       <div id="map" style={{ width: '100%', height: '400px' }}></div>
     </>
   );

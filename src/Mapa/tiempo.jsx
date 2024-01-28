@@ -1,62 +1,108 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import 'ol/ol.css';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import OSM from 'ol/source/OSM';
+import GeoJSON from 'ol/format/GeoJSON';
+import { fromLonLat } from 'ol/proj';
+import Draw from 'ol/interaction/Draw';
 
-function TimeSeriesIndexComponent() {
-    const [imageName, setImageName] = useState('');
-    const [drawnPolygon, setDrawnPolygon] = useState('');
-    const [fromDate, setFromDate] = useState('');
-    const [toDate, setToDate] = useState('');
-    const [bandSelector, setBandSelector] = useState('');
-    const [reducer, setReducer] = useState('');
-    const [scale, setScale] = useState('');
+function CombinedMapComponent() {
+  const [map, setMap] = useState(null);
+  const drawRef = useRef(null);
+  const mapRef = useRef(null);
+  const express = require('express');
+    const cors = require('cors');
+    const app = express();
 
-    const timeSeriesIndex = async () => {
-        const theJson = {
-            collectionNameTimeSeries: imageName,
-            geometry: JSON.parse(drawnPolygon),
-            dateFromTimeSeries: fromDate,
-            dateToTimeSeries: toDate,
-            indexName: bandSelector,
-            reducer: reducer,
-            scale: scale,
-        };
+app.use(cors({
+  origin: 'http://localhost:5173' // Set to your app's origin
+}));
+app.listen(5000, () => console.log('Server running on http://127.0.0.1:5000'));
 
-        try {
-            const response = await fetch(api_url + 'timeSeriesIndex', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(theJson)
-            });
 
-            const data = await response.json();
-            if (data.errMsg) {
-                console.info(data.errMsg);
-            } else {
-                if (data.hasOwnProperty("timeseries")) {
-                    createChart('timeSeriesIndex', data.timeseries); // Asegúrate de que createChart esté definido
-                } else {
-                    console.warn("Wrong Data Returned");
-                    console.log(data);
-                }
-            }
-        } catch (error) {
-            console.warn(error);
-            // Manejar el error
-        }
-    };
+  // Initialize the map
+  useEffect(() => {
+    const initialMap = new Map({
+      target: 'map-container',
+      layers: [
+        new TileLayer({ source: new OSM() }), // OpenStreetMap layer
+      ],
+      view: new View({
+        center: fromLonLat([0, 0]),
+        zoom: 2
+      })
+    });
+    setMap(initialMap);
+    mapRef.current = initialMap;
+  }, []);
 
-    return (
-        <div>
- <h2 className="text-center h2-style">Historico de Datos</h2>
+  // Fetch and add GeoJSON data
+  useEffect(() => {
+    if (map) {
+      fetch('http://127.0.0.1:5000/process_geojson')
+        .then(response => response.json())
+        .then(data => {
+          const vectorSource = new VectorSource({
+            features: new GeoJSON({ featureProjection: 'EPSG:3857' }).readFeatures(data)
+          });
 
-        <div className="container mt-4 p-4 border rounded" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
-            <div id="chartContainer" style={{ width: '40%', height: '200px' }}>
-                {/* Aquí se renderizará la gráfica */}
-            </div>
-        </div>
-        </div>
-    );
+          const vectorLayer = new VectorLayer({ source: vectorSource });
+          map.addLayer(vectorLayer);
+        })
+        .catch(error => console.error('Error loading GeoJSON data:', error));
+    }
+  }, [map]);
+
+  // Add drawing functionality
+  useEffect(() => {
+    if (map) {
+      addDrawFunctionality(map);
+    }
+  }, [map]);
+
+  const addDrawFunctionality = (map) => {
+    const source = new VectorSource({ wrapX: false });
+    const vector = new VectorLayer({ source: source });
+    map.addLayer(vector);
+
+    const draw = new Draw({
+      source: source,
+      type: 'Polygon'
+    });
+
+    drawRef.current = draw;
+    map.addInteraction(draw);
+
+    draw.on('drawend', (event) => {
+      const coordinates = event.feature.getGeometry().getCoordinates();
+      const transformedCoords = coordinates[0].map(coord => fromLonLat(coord, 'EPSG:3857', 'EPSG:4326'));
+      sendPolygonToServer(transformedCoords);
+    });
+  };
+
+  // Function to handle sending drawn polygon to server
+  const sendPolygonToServer = (coordinates) => {
+    // Replace with your server URL and endpoint
+    const api_url = "http://127.0.0.1:5000/"; 
+    fetch(api_url + "http://127.0.0.1:5000/", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ coordinates: coordinates })
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle server response here
+    })
+    .catch(error => console.error('Error sending coordinates:', error));
+  };
+
+  return <div id="map-container" style={{ width: '100%', height: '400px' }}></div>;
 }
 
-export default TimeSeriesIndexComponent;
+export default CombinedMapComponent;

@@ -1,49 +1,23 @@
-import React, { useState } from 'react';
-import Mapa from '../Mapa/Mapa';
-import Tiempo from '../Mapa/tiempo';
-import LayerSelector from '../Mapa/LayerSelector';
+import React from 'react';
 import Map from '../Mapa/Map';
+import Drawer from '../components/drawer';
 
 function HomePage() {
-  const [layerType, setLayerType] = useState('coords');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-
-  const changeLayer = (event) => {
-    setLayerType(event.target.value);
-  };
-  
-  const changeStartDate = (newDate) => {
-    setStartDate(newDate);
-  };
-
-  const changeEndDate = (newDate) => {
-    setEndDate(newDate);
-  };
-
   return (
-    <>
-
-      <LayerSelector 
-        layerType={layerType} 
-        changeLayer={changeLayer} 
-        startDate={startDate} 
-        changeStartDate={changeStartDate}
-        endDate={endDate}
-        changeEndDate={changeEndDate} 
-      />
-      <div className="p-4 border rounded, bdy2">
-        <Mapa layerType={layerType} startDate={startDate} endDate={endDate} />
+    <div>
+      <div className="cont">
+      <Drawer />
       </div>
-        <div>
-          <div className="cont">
-          <Tiempo />
-          </div>
-
+      <div className="p-4 border rounded">
+        <Map  style={{ width: '500px' }}/>
       </div>
-
-      
-    </>
+      <div className="cont">
+        <h2 className="text-center h2-style">La importancia de los sistemas agroalimentarios</h2>
+        <p className="text-justify p-style ">
+          Los sistemas agroalimentarios son fundamentales para la nutrición y la salud de las personas y el planeta. Desempeñan un papel crucial en la economía, empleando a una gran cantidad de personas y siendo una fuente esencial de desarrollo y crecimiento económico. Sin embargo, también tienen el potencial de impactar negativamente en el medio ambiente a través de la emisión de gases de efecto invernadero, la deforestación y la pérdida de biodiversidad. Por lo tanto, es esencial que trabajemos hacia sistemas agroalimentarios sostenibles que proporcionen alimentos saludables y nutritivos para todos, mientras protegemos el medio ambiente.
+        </p>
+      </div>
+    </div>
   );
 }
 

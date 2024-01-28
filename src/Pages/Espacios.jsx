@@ -1,5 +1,5 @@
 import React from 'react';
-import Mapa from '../Mapa/layercontrol';
+import Map from '../Mapa/Map';
 import Drawer from '../components/drawer';
 
 function HomePage() {
@@ -9,7 +9,7 @@ function HomePage() {
       <Drawer />
       </div>
       <div className="p-4 border rounded">
-        <Mapa  style={{ width: '500px' }}/>
+        <Map  style={{ width: '200px' }}/>
       </div>
       <div className="cont">
         <h2 className="text-center h2-style">La importancia de los sistemas agroalimentarios</h2>
