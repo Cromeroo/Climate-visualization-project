@@ -45,53 +45,59 @@ const StyledLayerSelector = styled.div`
 
 `;
 
-function LayerSelector({  layerType, changeLayer, startDate, changeStartDate, endDate, changeEndDate }) {
+function LayerSelector({ layerType, changeLayer, startDate, changeStartDate, endDate, changeEndDate }) {
   const [isMinimized, setIsMinimized] = useState(false); // Estado para controlar la minimización
 
-  // Función para alternar la minimización
+  // Función intermedia para manejar el cambio de capa y agregar el console.log
+  const handleLayerChange = (e) => {
+    const newLayerType = e.target.value;
+    console.log("Capa seleccionada:", newLayerType); // Aquí se muestra el valor seleccionado en la consola
+    changeLayer(e); // Llamada a la función original pasada como prop para manejar el cambio de capa
+  };
 
-  
   return (
     <StyledLayerSelector $isMinimized={isMinimized} className="toolbox">
+      <div>
+        <div className="row mt-3 d-flex justify-content-center">
+          <div className="col-9">
+            <label className="form-label">Capa:</label>
+            <select className="form-select" onChange={handleLayerChange} value={layerType}>
+              <option value="coords">Temperatura</option>
+              <option value="precipitation">Precipitación</option>
+              <option value="prueba">Prueba</option>
+            </select>
+          </div>
+        </div>
 
-    <div >
-      <div className="row mt-3 d-flex justify-content-center">
-        <div className="col-9">
-          <label className="form-label">Capa:</label>
-          <select className="form-select" onChange={changeLayer} value={layerType}>
-            <option value="coords">Temperatura</option>
-            <option value="process_geojson">Precipitación</option>
-          </select>
+        <hr />
+
+        <div className="row mb-3 justify-content-center">
+          <div className="col-9">
+            <label className="form-label">Fecha Inicial:</label>
+            <input
+              type="date"
+              className="form-control"
+              value={startDate}
+              onChange={(e) => changeStartDate(e.target.value)}
+            />
+          </div>
+
+          <div className="col-9">
+            <label className="form-label">Fecha Final:</label>
+            <input
+              type="date"
+              className="form-control"
+              value={endDate}
+              onChange={(e) => changeEndDate(e.target.value)}
+            />
+          </div>
         </div>
       </div>
-  
-      <hr />
-  
-      <div className="row mb-3 justify-content-center">
-        <div className="col-9">
-          <label className="form-label">Fecha Inicial:</label>
-          <input 
-            type="date" 
-            className="form-control" 
-            value={startDate} 
-            onChange={(e) => changeStartDate(e.target.value)} 
-          />
-        </div>
-  
-        <div className="col-9">
-          <label className="form-label">Fecha Final:</label>
-          <input 
-            type="date" 
-            className="form-control" 
-            value={endDate}   
-            onChange={(e) => changeEndDate(e.target.value)} 
-          />
-        </div>
-      </div>
-    </div>
     </StyledLayerSelector>
-
   );
 }
+
+
+
 
 export default LayerSelector;

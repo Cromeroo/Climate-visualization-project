@@ -8,12 +8,11 @@ import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 
 function MapComponent({ layerType,startDate,endDate }) { 
-  console.log(`Sending: ${startDate}`);
+  console.log(`Sending: ${layerType}`);
   console.log(`Sending: ${endDate}`);
 
 
   const layerTypeRef = useRef(layerType);
-  const vectorLayerRef = useRef(null);
 
 
   useEffect(() => {
@@ -36,10 +35,12 @@ function MapComponent({ layerType,startDate,endDate }) {
   fetch('http://127.0.0.1:5000/process_geojson')
   .then(response => response.json())
   .then(geojsonData => {
+    console.log('Datos GeoJSON recibidos:', geojsonData);
+
     // Crear una fuente vectorial con los datos GeoJSON
     const vectorSource = new ol.source.Vector({
       features: new ol.format.GeoJSON().readFeatures(geojsonData, {
-        dataProjection: 'EPSG:4326',  // Asegúrese de que esto coincida con la proyección de sus datos GeoJSON
+        dataProjection: 'EPSG:4326',  
         featureProjection: 'EPSG:3857' // Proyección del mapa
       })
     });
@@ -100,28 +101,58 @@ function MapComponent({ layerType,startDate,endDate }) {
   }
   
   function sendPolygonToServer(coordinates) {
-    const endpoint = layerTypeRef.current === 'coords' ? "coords" : "precipitation";
+    let endpoint;
+
+    // Determinar el endpoint basado en layerTypeRef.current
+    if (layerTypeRef.current === 'coords') {
+        endpoint = "coords";
+    } else if (layerTypeRef.current === 'precipitation') {
+        endpoint = "precipitation";
+    } else if (layerTypeRef.current === 'prueba') {
+        endpoint = "prueba"; // Nuevo endpoint añadido
+    } else {
+        //  definir un endpoint por defecto o manejar un caso no esperado
+        console.error("Tipo de capa desconocido:", layerTypeRef.current);
+        return; // Salir de la función si el tipo de capa no es reconocido
+    }
 
     console.log(`Sending to endpoint: ${endpoint}`);
     console.log(`Coordinates being sent:`, coordinates);
     fetch(api_url + endpoint, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ coordinates: coordinates })
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ coordinates: coordinates })
     })
     .then(response => response.json())
     .then(data => {
-      if (data.url) {
-        addTileServerURL(data.url, "userLayer");
-      }
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
-    });
-  }
+      if (data.url) { // Si la respuesta incluye una URL, se asume que es para una capa de teselas
+          addTileServerURL(data.url, "userLayer");
+      } else if (data.type === "FeatureCollection") { // Si la respuesta es un objeto GeoJSON
+          // Convertir el GeoJSON en una fuente de datos para OpenLayers
+          var vectorSource = new ol.source.Vector({
+              features: new ol.format.GeoJSON().readFeatures(data, {
+                  dataProjection: 'EPSG:4326', // Asegúrate de que la proyección de los datos es correcta
+                  featureProjection: 'EPSG:3857' // Proyección usada por OpenLayers por defecto
+              })
+          });
 
+          // Crear una capa vectorial usando la fuente de datos
+          var vectorLayer = new ol.layer.Vector({
+              source: vectorSource
+          });
+
+          // Añadir la capa vectorial al mapa
+          mapRef.current.addLayer(vectorLayer);
+      } else {
+          console.error('Formato de respuesta no reconocido:', data);
+      }
+  })
+  .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+  });
+}
   function addTileServerURL(url, layerID) {
     if (typeof url !== "string") {
       console.error("Invalid URL type:", typeof url);
