@@ -7,9 +7,10 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 
-function MapComponent({ layerType,startDate,endDate }) { 
+function MapComponent({ layerType,isLayerVisible }) { 
+  console.log("Prop de visibilidad en MapComponent:", isLayerVisible);
+
   console.log(`Sending: ${layerType}`);
-  console.log(`Sending: ${endDate}`);
 
 
   const layerTypeRef = useRef(layerType);
@@ -47,7 +48,11 @@ function MapComponent({ layerType,startDate,endDate }) {
 
     // Crear una capa vectorial con la fuente
     const vectorLayer = new ol.layer.Vector({
-      source: vectorSource
+      source: vectorSource,
+      id: 'geojson-layer',
+      visible: isLayerVisible // Usar isLayerVisible para establecer la visibilidad inicial
+
+
     });
 
     // Agregar la capa al mapa
@@ -57,6 +62,18 @@ function MapComponent({ layerType,startDate,endDate }) {
     console.error('Error al cargar los datos GeoJSON:', error);
   });
 }, []);
+
+useEffect(() => {
+  if (mapRef.current && mapRef.current.getLayers()) {
+    const geojsonLayer = mapRef.current.getLayers().getArray()
+      .find(layer => layer.get('id') === 'geojson-layer');
+
+    if (geojsonLayer) {
+      geojsonLayer.setVisible(isLayerVisible);
+      console.log("Visibilidad de la capa GeoJSON:", isLayerVisible);
+    }
+  }
+}, [isLayerVisible]);
 
   function loadMap(target, center, zoom) {
     const raster = new ol.layer.Tile({
@@ -140,7 +157,8 @@ function MapComponent({ layerType,startDate,endDate }) {
 
           // Crear una capa vectorial usando la fuente de datos
           var vectorLayer = new ol.layer.Vector({
-              source: vectorSource
+              source: vectorSource,
+
           });
 
           // Añadir la capa vectorial al mapa

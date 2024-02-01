@@ -4,25 +4,21 @@ import LayerSelector from '../Mapa/LayerSelector';
 import Drawer from '../components/drawert';
 function HomePage() {
   const [layerType, setLayerType] = useState('coords');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [isLayerVisible, setIsLayerVisible] = useState(false); // Capa no visible inicialmente
+  console.log("Cambiando visibilidad a:",isLayerVisible);
   const [showLayerSelector, setShowLayerSelector] = useState(false); // Initially false
 
   const changeLayer = (event) => {
     setLayerType(event.target.value);
   };
   
-  const changeStartDate = (newDate) => {
-    setStartDate(newDate);
-  };
-
-  const changeEndDate = (newDate) => {
-    setEndDate(newDate);
-  };
+  
   const toggleLayerSelector = () => {
     setShowLayerSelector(!showLayerSelector);
   };
-
+  const toggleLayerVisibility = () => {
+    setIsLayerVisible(!isLayerVisible);
+  };
   useEffect(() => {
     const handleResize = () => {
       setShowLayerSelector(!(window.innerWidth <= 1200));
@@ -34,34 +30,36 @@ function HomePage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
   return (
     <>
-
       <button onClick={toggleLayerSelector} style={{ position: 'absolute', zIndex: 1000 }}>
-      {showLayerSelector ? 'Esconder Selector de Capas' : 'Mostrar Selector de Capas'}
+        {showLayerSelector ? 'Esconder Selector de Capas' : 'Mostrar Selector de Capas'}
       </button>
 
       <div className='contenedor'>
         {showLayerSelector && (
-            <div className="layer-selector">
-          <LayerSelector 
-            layerType={layerType} 
-            changeLayer={changeLayer} 
-            startDate={startDate} 
-            changeStartDate={changeStartDate}
-            endDate={endDate}
-            changeEndDate={changeEndDate} 
-          />
+          <div className="layer-selector">
+            <LayerSelector 
+              layerType={layerType} 
+              changeLayer={changeLayer} 
+              isLayerVisible={isLayerVisible} 
+              setIsLayerVisible={setIsLayerVisible} 
+            />
           </div>
         )}
 
         <div className="p-4 border rounded" style={{ width: '80%', marginLeft: '10%' }}>
-          <Mapa layerType={layerType} startDate={startDate} endDate={endDate} />
+          <Mapa 
+            layerType={layerType}
+            isLayerVisible={isLayerVisible}
+             // Pasando isLayerVisible a Mapa
+
+          />
         </div>
       </div>
-      <div  style={{top: '3003px'}} >
-        
-      <Drawer/>
+      <div style={{ top: '300px' }}>
+        <Drawer />
       </div>
     </>
   );
