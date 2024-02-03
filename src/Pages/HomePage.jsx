@@ -7,12 +7,19 @@ function HomePage() {
   const [isLayerVisible, setIsLayerVisible] = useState(false); // Capa no visible inicialmente
   console.log("Cambiando visibilidad a:",isLayerVisible);
   const [showLayerSelector, setShowLayerSelector] = useState(false); // Initially false
-
+  
   const changeLayer = (event) => {
     setLayerType(event.target.value);
   };
   
-  
+  const [layersVisibility, setLayersVisibility] = useState({
+    precipitation: false, // Inicialmente visible
+    prueba: false // Inicialmente no visible
+  });
+
+  const handleVisibilityChange = (layerID, isVisible) => {
+    setLayersVisibility(prev => ({ ...prev, [layerID]: isVisible }));
+  };
   const toggleLayerSelector = () => {
     setShowLayerSelector(!showLayerSelector);
   };
@@ -45,6 +52,8 @@ function HomePage() {
               changeLayer={changeLayer} 
               isLayerVisible={isLayerVisible} 
               setIsLayerVisible={setIsLayerVisible} 
+              layersVisibility={layersVisibility} 
+              onVisibilityChange={handleVisibilityChange}            
             />
           </div>
         )}
@@ -53,8 +62,7 @@ function HomePage() {
           <Mapa 
             layerType={layerType}
             isLayerVisible={isLayerVisible}
-             // Pasando isLayerVisible a Mapa
-
+            layersVisibility={layersVisibility}
           />
         </div>
       </div>

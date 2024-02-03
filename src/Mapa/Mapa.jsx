@@ -7,13 +7,13 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 
-function MapComponent({ layerType,isLayerVisible }) { 
-  console.log("Prop de visibilidad en MapComponent:", isLayerVisible);
-
+function MapComponent({ layerType,isLayerVisible,layersVisibility  }) { 
   console.log(`Sending: ${layerType}`);
 
 
+
   const layerTypeRef = useRef(layerType);
+  const layerRefs = {};
 
 
   useEffect(() => {
@@ -116,7 +116,8 @@ useEffect(() => {
       sendPolygonToServer(transformedCoords);
     });
   }
-  
+  let layerCounter = 0; // Esto debería estar definido en el ámbito adecuado para que persista entre llamadas
+
   function sendPolygonToServer(coordinates) {
     let endpoint;
 
@@ -144,13 +145,14 @@ useEffect(() => {
     })
     .then(response => response.json())
     .then(data => {
+      
       if (data.url) { // Si la respuesta incluye una URL, se asume que es para una capa de teselas
-          addTileServerURL(data.url, "userLayer");
+          addTileServerURL(data.url, endpoint);
       } else if (data.type === "FeatureCollection") { // Si la respuesta es un objeto GeoJSON
           // Convertir el GeoJSON en una fuente de datos para OpenLayers
           var vectorSource = new ol.source.Vector({
               features: new ol.format.GeoJSON().readFeatures(data, {
-                  dataProjection: 'EPSG:4326', // Asegúrate de que la proyección de los datos es correcta
+                  dataProjection: 'EPSG:4326', 
                   featureProjection: 'EPSG:3857' // Proyección usada por OpenLayers por defecto
               })
           });
@@ -158,6 +160,7 @@ useEffect(() => {
           // Crear una capa vectorial usando la fuente de datos
           var vectorLayer = new ol.layer.Vector({
               source: vectorSource,
+              id:endpoint
 
           });
 
@@ -180,12 +183,35 @@ useEffect(() => {
       source: new ol.source.XYZ({
         url: url
       }),
-      id: layerID,
+
       opacity: 0.7
     });
+    geeLayer.set('id', layerID); // Establecer el ID de esta manera
+    console.log("Creando capa con ID:", layerID, geeLayer);
+
     mapRef.current.addLayer(geeLayer);
+    
   }
 
+  function setLayerVisibility(layerID, isVisible) {
+    const layers = mapRef.current.getLayers().getArray();
+    const targetLayer = layers.find(layer => layer.get('id') === layerID);
+    console.log("Configurando visibilidad para", layerID, ":", isVisible);
+    if (targetLayer) {
+      targetLayer.setVisible(isVisible);
+    } else {
+      console.log("Capa no encontrada:", layerID);
+    }
+  }
+
+  useEffect(() => {
+    if (layersVisibility) {
+      Object.keys(layersVisibility).forEach(layerID => {
+        setLayerVisibility(layerID, layersVisibility[layerID]);
+      });
+    }
+  }, [layersVisibility]); 
+  
   // Agregar un selector para el tipo de capa antes del mapa
   return (
     <>
