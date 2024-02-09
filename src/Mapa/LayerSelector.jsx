@@ -83,73 +83,86 @@ function LayerSelector({ layerType, changeLayer, isLayerVisible, setIsLayerVisib
 
 
 
-  return (
-    <StyledLayerSelector $isMinimized={isMinimized} className="toolbox">
-      <div>
-        <div className="row mt-3 d-flex justify-content-center">
-          <div className="col-9">
-            <label className="form-label"><strong>Capa </strong>:</label>
-            <select className="form-select" onChange={handleLayerChange} value={layerType}>
-              <option value="coords">Temperatura</option>
-            
-              <option value="precipitation">Precipitación</option>
-              <option value="prueba">Prueba</option>
-            </select>
-            
-          </div>
-        </div>
-        <label>
-        <input
-          type="checkbox"
-          value="precipitation"
-          checked={layersChecked['precipitation'] || false}
-          onChange={handleLayerChange}
-        />
-        Layer 1
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="prueba"
-          checked={layersChecked['prueba'] || false}
-          onChange={handleLayerChange}
-        />
-        Layer 1
-      </label>
-
-
-        <hr />
-
-        <div className="row mb-3 justify-content-center">
-          <div className="col-9">
-            <label className="form-label"><strong>Capa Base</strong>:</label>
-          </div>
-
-
-          <div className="col-9">
-            {/* Checkbox para la visibilidad de la capa de Departamentos */}
-            <label>
-        GeoJSON Layer
-        <input
-          type="checkbox"
-          checked={isLayerVisible}
-          onChange={(e) => setIsLayerVisible(e.target.checked)}
-        />
-      </label>
-            {/* Asumiendo que podrías tener otro manejo para la visibilidad de Municipios */}
-            <label className="form-label">
-              Municipios
-              <input type="checkbox" onChange={(e) => {/* Aquí podrías manejar la visibilidad de otra capa */}} />
-            </label>
-          </div>
-
-          <div className="col-9">
-            <label className="form-label">Fecha Final:</label>
-          </div>
+return (
+  <StyledLayerSelector $isMinimized={isMinimized} className="toolbox">
+    <div>
+      <div className="row mt-3 d-flex justify-content-center">
+        <div className="col-9">
+          <label className="form-label"><strong>Capa </strong>:</label>
+          <select className="form-select" onChange={handleLayerChange} value={layerType}>
+            <option value="coords">Temperatura</option>
+            <option value="precipitation">Precipitación</option>
+            <option value="prueba">Prueba</option>
+          </select>
         </div>
       </div>
-    </StyledLayerSelector>
-  );
+      <div className="checkbox-container">
+  <label>
+    <input
+      type="checkbox"
+      value="coords"
+      checked={layersChecked['coords'] || false}
+      onChange={handleLayerChange}
+    />
+    Temperatura
+  </label>
+</div>
+
+<div className="checkbox-container">
+  <label>
+    <input
+      type="checkbox"
+      value="precipitation"
+      checked={layersChecked['precipitation'] || false}
+      onChange={handleLayerChange}
+    />
+    Precipitación
+  </label>
+</div>
+
+<div className="checkbox-container">
+  <label>
+    <input
+      type="checkbox"
+      value="prueba"
+      checked={layersChecked['prueba'] || false}
+      onChange={handleLayerChange}
+    />
+    Prueba
+  </label>
+</div>
+      <hr />
+
+      <div className="row mb-3 justify-content-center">
+        <div className="col-9">
+          <label className="form-label"><strong>Capa Base</strong>:</label>
+        </div>
+
+        <div className="col-9">
+          {/* Checkbox para la visibilidad de la capa de Departamentos */}
+          <label>
+            Departamentos
+            <input
+              type="checkbox"
+              checked={isLayerVisible}
+              onChange={(e) => setIsLayerVisible(e.target.checked)}
+            />
+          </label>
+          <br />
+          {/* Asumiendo que podrías tener otro manejo para la visibilidad de Municipios */}
+          <label className="form-label">
+            Municipios
+            <input type="checkbox" onChange={(e) => {/* Aquí podrías manejar la visibilidad de otra capa */}} />
+          </label>
+        </div>
+
+        <div className="col-9">
+          <label className="form-label">Fecha Final:</label>
+        </div>
+      </div>
+    </div>
+  </StyledLayerSelector>
+);
 }
 
 

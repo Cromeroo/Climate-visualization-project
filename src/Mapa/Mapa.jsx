@@ -186,31 +186,33 @@ useEffect(() => {
 
       opacity: 0.7
     });
-    geeLayer.set('id', layerID); // Establecer el ID de esta manera
-    console.log("Creando capa con ID:", layerID, geeLayer);
+    const uniqueLayerID = `${layerID}-${Date.now()}`; // Agrega un identificador único
+    geeLayer.set('id', uniqueLayerID);  // Establecer el ID de esta manera
+    console.log("Creando capa con ID:", uniqueLayerID, geeLayer);
 
     mapRef.current.addLayer(geeLayer);
     
   }
 
-  function setLayerVisibility(layerID, isVisible) {
+  function setLayerVisibilityByOption(option, isVisible) {
     const layers = mapRef.current.getLayers().getArray();
-    const targetLayer = layers.find(layer => layer.get('id') === layerID);
-    console.log("Configurando visibilidad para", layerID, ":", isVisible);
-    if (targetLayer) {
-      targetLayer.setVisible(isVisible);
-    } else {
-      console.log("Capa no encontrada:", layerID);
-    }
+    layers.forEach(layer => {
+      const layerID = layer.get('id');
+      if (layerID && layerID.startsWith(option)) {
+        layer.setVisible(isVisible);
+        console.log(`Visibilidad actualizada para todas las capas de ${option}: ${isVisible}`);
+      }
+    });
   }
 
   useEffect(() => {
     if (layersVisibility) {
-      Object.keys(layersVisibility).forEach(layerID => {
-        setLayerVisibility(layerID, layersVisibility[layerID]);
+      Object.keys(layersVisibility).forEach(option => {
+        console.log(`Actualizando visibilidad para ${option}: ${layersVisibility[option]}`);
+        setLayerVisibilityByOption(option, layersVisibility[option]);
       });
     }
-  }, [layersVisibility]); 
+  }, [layersVisibility]);
   
   // Agregar un selector para el tipo de capa antes del mapa
   return (

@@ -1,15 +1,20 @@
 import React from 'react';
-import Map from '../Mapa/Map';
+import Tiempo from '../Mapa/tiempo2';
+import Tiempo2 from '../Mapa/tiempo';
+
 import Drawer from '../components/drawer';
 
 function HomePage() {
   return (
     <div>
-      <div className="cont">
-      <Drawer />
+      <div className="p-1 border rounded cont1">
+        <Tiempo  style={{ width: '500px' }}/>
       </div>
-      <div className="p-4 border rounded">
-        <Map  style={{ width: '500px' }}/>
+      <div className="p-1 border rounded cont1">
+        <Tiempo2  style={{ width: '500px' }}/>
+      </div>
+      <div className="cont">
+        <Drawer />
       </div>
       <div className="cont">
         <h2 className="text-center h2-style">La importancia de los sistemas agroalimentarios</h2>

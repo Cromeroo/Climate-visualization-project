@@ -24,6 +24,8 @@
     align-items: center; /* Mostrar botón en pantallas <= 1200px */
   }
 }
+
+
 @media (max-width: 600px) { /* Ajusta este valor según tus necesidades */
   .minimize-button {
     display: block; /* Muestra el botón en pantallas pequeñas */
@@ -113,6 +115,17 @@
   padding: 0rem;
   text-align: center;
 }
+.cont1{
+  width:71%;
+  margin: 0 auto;
+
+  padding: 0rem;
+  text-align: center;
+}
+[data-theme="dark"] .upcoming-widget-horizontal__apparent--QFHR {
+  max-width: 90% !important;
+}
+
 
 
 .homepage-container {
@@ -159,6 +172,17 @@
 .contenedor{
   display: flex;
 
+}
+.checkbox-container {
+  display: flex;
+  align-items: center; /* Alinea verticalmente los elementos */
+  margin-bottom: 10px;
+  margin-left: 30px; /* Espacio entre el checkbox y la etiqueta */
+  /* Espacio entre los contenedores de checkbox */
+}
+
+.checkbox-container input[type="checkbox"] {
+  margin-right: 10px; /* Espacio entre el checkbox y la etiqueta */
 }
 
 .auto-slider-container {
@@ -368,24 +392,42 @@
 
 .logo {
   position: absolute;
-  top: -3px;
-  left: revert;
-  width: 8rem;
+  top: -1px;
+  left: 40px;
+  width: 15rem;
   height: auto;  /* Esto mantiene la proporción del logo */
   display: block;
   margin: 0 auto;  /* Centra el logo horizontalmente */
   }
+@media (max-width: 1480px) {
+    .logo {
+      width: 13rem;
+      left:10px;
+      top: -2px;
+    }
+  }
+@media (max-width: 1351px) {
+    .logo {
+      width: 13rem;
+      left:-12px;
+      top: -16px;
+    }
+  }
   /* Si la pantalla tiene menos de 600px de ancho, ajusta el tamaño del logo */
 @media (max-width: 600px) {
   .logo {
-    width: 100px;
+    width: 170px;
+    left: -4%;
+    top: -2%;
   }
 }
 
 /* Si la pantalla tiene menos de 400px de ancho, ajusta aún más el tamaño del logo */
 @media (max-width: 400px) {
   .logo {
-    width: 50px;
+    width: 100px;
+    left: -2%;
+    top: auto;
   }
 }
 
@@ -559,6 +601,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
+
 
 .sidebar .nav-link .feather {
   margin-right: 4px;
