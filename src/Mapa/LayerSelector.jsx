@@ -46,12 +46,22 @@ const StyledLayerSelector = styled.div`
 `;
 
 function LayerSelector({ layerType, changeLayer, isLayerVisible, setIsLayerVisible,onVisibilityChange  }) {
-  const [isMinimized, setIsMinimized] = useState(false); // Estado para controlar la minimización
+  const [isMinimized, setIsMinimized] = useState(false); 
+  const capasDeseadas = ['Resguardos', 'lim-layer', 'Mpiosparticipación'];
+  // Estado para controlar la minimización
   const [selectedLayer, setSelectedLayer] = useState('');
   const [layersChecked, setLayersChecked] = useState({
     precipitation: false,
     prueba: false,
   });
+  const handleVisibilityChange = (layerName, isVisible) => {
+    console.log("Cambiando visibilidad de", layerName, "a", isVisible);
+    setIsLayerVisible(prevState => ({
+      ...prevState,
+      [layerName]: isVisible,
+    }));
+  };
+  console.log('Estado inicial de isLayerVisible en LayerSelector:', isLayerVisible);
 
 
   // Función intermedia para manejar el cambio de capa y agregar el console.log
@@ -67,6 +77,8 @@ function LayerSelector({ layerType, changeLayer, isLayerVisible, setIsLayerVisib
     onVisibilityChange(layerName, isChecked);
     
     console.log("Capa seleccionada:", layerName, "; Estado:", isChecked);
+    changeLayer(e); // Llamada a la función original pasada como prop para manejar el cambio de capa
+    handleVisibilityChange(layerName, isChecked);
 
 
     setLayersChecked(prev => {
@@ -78,6 +90,8 @@ function LayerSelector({ layerType, changeLayer, isLayerVisible, setIsLayerVisib
     
   // Llama a la función para manejar la visibilidad de la capa
   onVisibilityChange(layerName, isChecked);
+
+
 };
 
 
@@ -93,6 +107,7 @@ return (
             <option value="coords">Temperatura</option>
             <option value="precipitation">Precipitación</option>
             <option value="prueba">Prueba</option>
+            
           </select>
         </div>
       </div>
@@ -140,24 +155,24 @@ return (
 
         <div className="col-9">
           {/* Checkbox para la visibilidad de la capa de Departamentos */}
-          <label>
-            Departamentos
-            <input
-              type="checkbox"
-              checked={isLayerVisible}
-              onChange={(e) => setIsLayerVisible(e.target.checked)}
-            />
-          </label>
-          <br />
-          {/* Asumiendo que podrías tener otro manejo para la visibilidad de Municipios */}
-          <label className="form-label">
-            Municipios
-            <input type="checkbox" onChange={(e) => {/* Aquí podrías manejar la visibilidad de otra capa */}} />
-          </label>
-        </div>
+          <div>
+      {/* Otros controles */}
+      {Object.entries(isLayerVisible)
+        .filter(([layerId, _]) => capasDeseadas.includes(layerId)) // Filtra solo las capas deseadas
+        .map(([layerId, isVisible]) => (
+        <label key={layerId}>
+          {layerId}
+          <input
+            type="checkbox"
+            checked={isVisible}
+            onChange={(e) => handleVisibilityChange(layerId, e.target.checked)}
+          />
+        </label>
+))}
+    </div>
+  </div>
 
         <div className="col-9">
-          <label className="form-label">Fecha Final:</label>
         </div>
       </div>
     </div>

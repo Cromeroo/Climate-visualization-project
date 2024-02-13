@@ -13,7 +13,6 @@ function MapComponent({ layerType,isLayerVisible,layersVisibility  }) {
 
 
   const layerTypeRef = useRef(layerType);
-  const layerRefs = {};
 
 
   useEffect(() => {
@@ -24,7 +23,6 @@ function MapComponent({ layerType,isLayerVisible,layersVisibility  }) {
   const api_url = "http://127.0.0.1:5000/";
   const mapRef = useRef(null);  
   const drawRef = useRef(null);
-  const geojsonLayerRef = useRef(); 
 
 
   useEffect(() => {
@@ -45,12 +43,38 @@ function MapComponent({ layerType,isLayerVisible,layersVisibility  }) {
         featureProjection: 'EPSG:3857' // Proyección del mapa
       })
     });
+    const styleFunction = (feature) => {
+      return new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(255, 255, 255, 0.6)' // Color de relleno
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#319FD3', // Color de borde
+          width: 1 // Ancho de borde
+        }),
+
+
+
+        text: new ol.style.Text({
+          text: feature.get('NOMBRE'), // Asume que cada feature tiene un atributo 'name' que quieres mostrar como etiqueta
+          fill: new ol.style.Fill({
+            color: '#000' // Color del texto de la etiqueta
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fff', // Contorno del texto para mejorar la legibilidad
+            width: 3
+          }),
+          font: '24px Calibri,sans-serif' // Estilo de fuente de la etiqueta
+        })
+      });
+    };
 
     // Crear una capa vectorial con la fuente
     const vectorLayer = new ol.layer.Vector({
       source: vectorSource,
-      id: 'geojson-layer',
-      visible: isLayerVisible // Usar isLayerVisible para establecer la visibilidad inicial
+      style: styleFunction, 
+      id: 'Resguardos',
+      visible: isLayerVisible['Resguardos']
 
 
     });
@@ -64,16 +88,138 @@ function MapComponent({ layerType,isLayerVisible,layersVisibility  }) {
 }, []);
 
 useEffect(() => {
-  if (mapRef.current && mapRef.current.getLayers()) {
-    const geojsonLayer = mapRef.current.getLayers().getArray()
-      .find(layer => layer.get('id') === 'geojson-layer');
 
-    if (geojsonLayer) {
-      geojsonLayer.setVisible(isLayerVisible);
-      console.log("Visibilidad de la capa GeoJSON:", isLayerVisible);
-    }
+  fetch('http://127.0.0.1:5000/lim_geojson')
+  .then(response => response.json())
+  .then(geojsonData => {
+    console.log('Datos GeoJSON recibidos:', geojsonData);
+
+    // Crear una fuente vectorial con los datos GeoJSON
+    const vectorSource = new ol.source.Vector({
+      features: new ol.format.GeoJSON().readFeatures(geojsonData, {
+        dataProjection: 'EPSG:4326',  
+        featureProjection: 'EPSG:3857' // Proyección del mapa
+      })
+    });
+    const styleFunction = (feature) => {
+      return new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(255, 255, 255, 0.6)' // Color de relleno
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#319FD3', // Color de borde
+          width: 1 // Ancho de borde
+        }),
+
+
+
+        text: new ol.style.Text({
+          text: feature.get('DeNombre'), // Asume que cada feature tiene un atributo 'name' que quieres mostrar como etiqueta
+          fill: new ol.style.Fill({
+            color: '#000' // Color del texto de la etiqueta
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fff', // Contorno del texto para mejorar la legibilidad
+            width: 3
+          }),
+          font: '24px Calibri,sans-serif' // Estilo de fuente de la etiqueta
+        })
+      });
+    };
+
+    // Crear una capa vectorial con la fuente
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource,
+      style: styleFunction, 
+      id: 'lim-layer',
+      visible: isLayerVisible['lim-layer']
+
+    });
+
+    // Agregar la capa al mapa
+    mapRef.current.addLayer(vectorLayer);
+  })
+  .catch(error => {
+    console.error('Error al cargar los datos GeoJSON:', error);
+  });
+}, []);
+
+useEffect(() => {
+
+  fetch('http://127.0.0.1:5000/res_geojson')
+  .then(response => response.json())
+  .then(geojsonData => {
+    console.log('Datos GeoJSON recibidos:', geojsonData);
+
+    // Crear una fuente vectorial con los datos GeoJSON
+    const vectorSource = new ol.source.Vector({
+      features: new ol.format.GeoJSON().readFeatures(geojsonData, {
+        dataProjection: 'EPSG:4326',  
+        featureProjection: 'EPSG:3857' // Proyección del mapa
+      })
+    });
+    const styleFunction = (feature) => {
+      return new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(255, 255, 255, 0.6)' // Color de relleno
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#319FD3', // Color de borde
+          width: 1 // Ancho de borde
+        }),
+
+
+
+        text: new ol.style.Text({
+          text: feature.get('MpNombre'), // Asume que cada feature tiene un atributo 'name' que quieres mostrar como etiqueta
+          fill: new ol.style.Fill({
+            color: '#000' // Color del texto de la etiqueta
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fff', // Contorno del texto para mejorar la legibilidad
+            width: 3
+          }),
+          font: '24px Calibri,sans-serif' // Estilo de fuente de la etiqueta
+        })
+      });
+    };
+
+    // Crear una capa vectorial con la fuente
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource,
+      style: styleFunction, 
+      id: 'Mpiosparticipación',
+      visible: isLayerVisible['Mpiosparticipación']
+
+    });
+
+    // Agregar la capa al mapa
+    mapRef.current.addLayer(vectorLayer);
+  })
+  .catch(error => {
+    console.error('Error al cargar los datos GeoJSON:', error);
+  });
+}, []);
+
+useEffect(() => {
+  if (mapRef.current && mapRef.current.getLayers()) {
+    const layers = mapRef.current.getLayers().getArray();
+
+    console.log('Capas en el mapa:', layers.map(layer => layer.get('id')));
+    console.log('Estado de isLayerVisible en Mapa:', isLayerVisible);
+
+    layers.forEach(layer => {
+      const layerId = layer.get('id');
+      console.log(`Capa: ${layerId}, Visibilidad deseada: ${isLayerVisible[layerId]}`);
+      if (isLayerVisible.hasOwnProperty(layerId)) {
+        layer.setVisible(isLayerVisible[layerId]);
+      }
+    });
   }
 }, [isLayerVisible]);
+
+
+
 
   function loadMap(target, center, zoom) {
     const raster = new ol.layer.Tile({
@@ -128,6 +274,8 @@ useEffect(() => {
         endpoint = "precipitation";
     } else if (layerTypeRef.current === 'prueba') {
         endpoint = "prueba"; // Nuevo endpoint añadido
+    } else if (layerTypeRef.current === 'process_s2_images') {
+        endpoint = "process_s2_images"; // Nuevo endpoint añadido
     } else {
         //  definir un endpoint por defecto o manejar un caso no esperado
         console.error("Tipo de capa desconocido:", layerTypeRef.current);

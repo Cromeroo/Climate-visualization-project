@@ -4,8 +4,7 @@ import LayerSelector from '../Mapa/LayerSelector';
 import Drawer from '../components/drawert';
 function HomePage() {
   const [layerType, setLayerType] = useState('coords');
-  const [isLayerVisible, setIsLayerVisible] = useState(false); // Capa no visible inicialmente
-  console.log("Cambiando visibilidad a:",isLayerVisible);
+  
   const [showLayerSelector, setShowLayerSelector] = useState(false); // Initially false
   
   const changeLayer = (event) => {
@@ -15,17 +14,28 @@ function HomePage() {
   const [layersVisibility, setLayersVisibility] = useState({
     precipitation: false, // Inicialmente visible
     prueba: false // Inicialmente no visible
+    
+    
   });
+  const [isLayerVisible, setIsLayerVisible] = useState({
+    'Resguardos': false,
+    'lim-layer': false,
+    'Mpiosparticipación':false
+  });
+  console.log('Estado inicial de isLayerVisible:', isLayerVisible);
 
-  const handleVisibilityChange = (layerID, isVisible) => {
-    setLayersVisibility(prev => ({ ...prev, [layerID]: isVisible }));
+
+  
+  const handleVisibilityChange = (layerId, isVisible) => {
+    setLayersVisibility(prevState => ({
+      ...prevState,
+      [layerId]: isVisible
+    }));
   };
   const toggleLayerSelector = () => {
     setShowLayerSelector(!showLayerSelector);
   };
-  const toggleLayerVisibility = () => {
-    setIsLayerVisible(!isLayerVisible);
-  };
+
   useEffect(() => {
     const handleResize = () => {
       setShowLayerSelector(!(window.innerWidth <= 1200));

@@ -15,8 +15,10 @@ h1:hover {
   color: #69ab4f !important; 
 }
 h1 a {
-  color: inherit !important;
+  text-align: center;
 
+  color: inherit !important;
+  font-weight:700;
   text-decoration: none;}
 .mapa-container {
   position: relative;

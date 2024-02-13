@@ -126,6 +126,53 @@
   max-width: 90% !important;
 }
 
+.navbar-container {
+  padding: 20px;
+  display: flex; /* Ejemplo, si quieres asegurarte de que usa flex */
+  justify-content: center;
+  margin-left: 20%; /}
+  
+.navbar-content.container {
+  justify-content: center;
+  }
+  @media (max-width: 992px) 
+  {
+    .navbar-content.container 
+    {
+      margin-left: -10%;
+  
+    }
+  } 
+  
+
+@media (max-width: 768px) 
+{
+  .navbar-content.container 
+  {
+    margin-left: -10%;
+
+  }
+}  
+
+.navbar {
+  background-color: transparent;
+  font-size: 20px;
+  padding: 10px;
+  margin: 18px;
+  top: 40px;
+  left: 8%;
+  font-weight: 600;
+}
+
+.navbar-content {
+  justify-content: center;
+}
+.custom-toggler, .navbar-toggler {
+  /* Ajusta estos valores según necesites */
+  margin-left: auto; /* Esto alineará el botón a la derecha */
+  margin-right: auto; /* Espacio a la derecha del botón */
+}
+
 
 
 .homepage-container {
@@ -796,5 +843,76 @@ body {
 
 .cardContainer:hover::before {
   transform: translate(-50px, 50px);
+}
+.comentarios-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comentario {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.texto-comentario {
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.votos {
+  display: flex;
+  align-items: center;
+}
+
+.voto-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 20px;
+  margin-right: 5px;
+  transition: color 0.3s;
+}
+
+.voto-btn:hover {
+  color: #333;
+}
+
+.nuevo-comentario-container {
+  margin-top: 20px;
+}
+
+.nuevo-comentario-textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  resize: none;
+}
+
+.enviar-btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.enviar-btn:hover {
+  background-color: #0056b3;
 }
 
