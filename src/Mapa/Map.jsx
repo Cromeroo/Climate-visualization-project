@@ -1,70 +1,135 @@
-import React, { useEffect, useState } from 'react';
-import 'ol/ol.css';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
-import OSM from 'ol/source/OSM';
-import GeoJSON from 'ol/format/GeoJSON';
-import { fromLonLat } from 'ol/proj';
+import React, { useEffect, useRef,useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-function MapComponent() {
-  const [map, setMap] = useState(null);
+import 'ol/ol.css';
+
+
+function MapComponent({ layerType,isLayerVisible,layersVisibility  }) { 
+  console.log(`Sending: ${layerType}`);
+  const [timeSeriesData, setTimeSeriesData] = useState([]);
+
+
+
+  const layerTypeRef = useRef(layerType);
+
 
   useEffect(() => {
-    // Inicializar el mapa
-    const initialMap = new Map({
-      target: 'map-container', // El ID de tu div contenedor
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        }),
-        // Otras capas pueden ser añadidas aquí
-      ],
-      view: new View({
-        center: fromLonLat([0, 0]), // Transforma las coordenadas a la proyección 'EPSG:3857'
-        zoom: 2
-      })
-    });
-    setMap(initialMap);
+    layerTypeRef.current = layerType;
+  }, [layerType]);
+
+
+  const api_url = "http://127.0.0.1:5000/";
+  const mapRef = useRef(null);  
+  const drawRef = useRef(null);
+
+
+  useEffect(() => {
+    loadMap("map", ol.proj.transform([-77.0197, 2.7738], 'EPSG:4326', 'EPSG:3857'), 8);
+
   }, []);
 
-  useEffect(() => {
-    if (map) {
-      // Realizar la solicitud para obtener datos GeoJSON
-      fetch('http://127.0.0.1:5000/process_geojson')
-        .then(response => response.json())
-        .then(data => {
-          console.log('Datos GeoJSON recibidos:', data);
 
-          // Crear una fuente de datos vectoriales con los datos GeoJSON
-          const vectorSource = new VectorSource({
-            features: new GeoJSON({
-              featureProjection: 'EPSG:3857' 
-            }).readFeatures(data)
-          });
+  function loadMap(target, center, zoom) {
+    const raster = new ol.layer.Tile({
+      source: new ol.source.OSM()
+    });
+    mapRef.current = new ol.Map({
+      layers: [raster],
+      target: target,
+      view: new ol.View({
+          center: center,
+          zoom: zoom
+      })
+    });
 
-          // Crear una capa vectorial con la fuente de datos
-          const vectorLayer = new VectorLayer({
-            source: vectorSource
-          });
+    // Agregar funcionalidad de dibujo
+    addDrawFunctionality(mapRef.current);
+  }
 
-          // Añadir la capa al mapa
-          map.addLayer(vectorLayer);
-      console.log(map);
-        })
-        .catch(error => console.error('Error al cargar los datos GeoJSON:', error));
-    }
-  }, [map]);
+  function addDrawFunctionality(map) {
+    const source = new ol.source.Vector({wrapX: false});
+    const vector = new ol.layer.Vector({
+      source: source
+    });
+    map.addLayer(vector);
+
+    const draw = new ol.interaction.Draw({
+      source: source,
+      type: 'Polygon',
+      contrast: 0.2
+    });
+
+    drawRef.current = draw;
+    map.addInteraction(draw);
+
+    draw.on('drawend', (event) => {
+      const coordinates = event.feature.getGeometry().getCoordinates();
+      const transformedCoords = coordinates[0].map(coord => ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326'));
+      
+      sendPolygonToServer(transformedCoords);
+    });
+  }
+  function sendPolygonToServer(transformedCoords) {
+    const payload = {
+      coordinates: [transformedCoords], // La API espera un array de arrays de coordenadas
+      dateFrom: '2020-01-01', // Establece tus propias fechas
+      dateTo: '2020-12-31',
+      indexName: 'NDVI', // O cualquier índice que necesites
+    };
+  
+    fetch(api_url + 'timeSeriesIndex', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      console.log('Response data:', data); // Añade esta línea para depurar
+      if (data.timeSeries && Array.isArray(data.timeSeries)) {
+        const formattedData = data.timeSeries.map(item => ({
+          date: new Date(item.date).toLocaleDateString(), // Ajusta según el formato de tu fecha
+          value: item.value,
+        }));
+        setTimeSeriesData(formattedData);
+      } else {
+        console.error('Data format is incorrect or timeSeries is missing:', data);
+        // Manejar el caso en que timeSeries no exista o no tenga el formato esperado
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+  
 
 
 
 
+  return (
+    <>
+      
+      <div id="map" style={{ width: '100%', height: '400px' }}></div>
+      <LineChart
+      width={500}
+      height={300}
+      data={timeSeriesData}
+      margin={{
+        top: 5, right: 30, left: 20, bottom: 5,
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
+    </LineChart>
 
-  return <div id="map-container" style={{ width: '100%', height: '400px' }}></div>;
+    </>
+  );
 }
 
 export default MapComponent;
-
-

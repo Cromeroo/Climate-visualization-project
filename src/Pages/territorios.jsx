@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Tiempo from '../Mapa/tiempo2';
-import LayerSelector from '../Mapa/LayerSelector';
+import Mapa1 from '../Mapa/Map';
 import Drawer from '../components/drawert';
 function ParentComponent() {
   
 
   return (
-      <Tiempo/>
+      <Mapa1/>
 
       
         

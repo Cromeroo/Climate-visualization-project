@@ -8,10 +8,15 @@ function HomePage() {
       <div className="cont">
       <Drawer />
       </div>
-      <div className="p-4 border rounded">
+      <div >
       <Comment />
 
       </div>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <div className="cont">
         <h2 className="text-center h2-style">La importancia de los sistemas agroalimentarios</h2>
         <p className="text-justify p-style ">

@@ -29,7 +29,7 @@ function MapComponent({ layerType,isLayerVisible,layersVisibility  }) {
     loadMap("map", ol.proj.transform([-77.0197, 2.7738], 'EPSG:4326', 'EPSG:3857'), 8);
 
   }, []);
-  useEffect(() => {
+useEffect(() => {
 
   fetch('http://127.0.0.1:5000/process_geojson')
   .then(response => response.json())
@@ -131,8 +131,8 @@ useEffect(() => {
     const vectorLayer = new ol.layer.Vector({
       source: vectorSource,
       style: styleFunction, 
-      id: 'lim-layer',
-      visible: isLayerVisible['lim-layer']
+      id: 'Departamentos',
+      visible: isLayerVisible['Departamentos']
 
     });
 
@@ -362,6 +362,10 @@ useEffect(() => {
     }
   }, [layersVisibility]);
   
+
+
+
+
   // Agregar un selector para el tipo de capa antes del mapa
   return (
     <>

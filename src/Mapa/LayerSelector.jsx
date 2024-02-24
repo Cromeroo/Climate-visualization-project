@@ -47,7 +47,7 @@ const StyledLayerSelector = styled.div`
 
 function LayerSelector({ layerType, changeLayer, isLayerVisible, setIsLayerVisible,onVisibilityChange  }) {
   const [isMinimized, setIsMinimized] = useState(false); 
-  const capasDeseadas = ['Resguardos', 'lim-layer', 'Mpiosparticipación'];
+  const capasDeseadas = ['Resguardos', 'Departamentos', 'Mpiosparticipación'];
   // Estado para controlar la minimización
   const [selectedLayer, setSelectedLayer] = useState('');
   const [layersChecked, setLayersChecked] = useState({

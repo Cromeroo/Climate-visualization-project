@@ -19,7 +19,7 @@ function HomePage() {
   });
   const [isLayerVisible, setIsLayerVisible] = useState({
     'Resguardos': false,
-    'lim-layer': false,
+    'Departamentos': false,
     'Mpiosparticipación':false
   });
   console.log('Estado inicial de isLayerVisible:', isLayerVisible);

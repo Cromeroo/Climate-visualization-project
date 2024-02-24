@@ -845,10 +845,10 @@ body {
   transform: translate(-50px, 50px);
 }
 .comentarios-container {
-  max-width: 600px;
+  max-width: 1220px;
   margin: 0 auto;
   padding: 20px;
-  background: #f9f9f9;
+  background: #f9f9f9ee;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
