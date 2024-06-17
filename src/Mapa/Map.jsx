@@ -1,5 +1,5 @@
 import React, { useEffect, useRef,useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer } from 'recharts';
 
 import 'ol/ol.css';
 
@@ -84,52 +84,55 @@ function MapComponent({ layerType,isLayerVisible,layersVisibility  }) {
       },
       body: JSON.stringify(payload),
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then(data => {
       console.log('Success:', data);
-      console.log('Response data:', data); // Añade esta línea para depurar
       if (data.timeSeries && Array.isArray(data.timeSeries)) {
         const formattedData = data.timeSeries.map(item => ({
-          date: new Date(item.date).toLocaleDateString(), // Ajusta según el formato de tu fecha
+          date: new Date(item.date).toLocaleDateString(), // Asegúrate de que esto se ajusta a tus necesidades
           value: item.value,
         }));
         setTimeSeriesData(formattedData);
       } else {
-        console.error('Data format is incorrect or timeSeries is missing:', data);
-        // Manejar el caso en que timeSeries no exista o no tenga el formato esperado
+        throw new Error('Data format is incorrect or timeSeries is missing');
       }
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   }
-  
-
-
-
 
   return (
-    <>
-      
-      <div id="map" style={{ width: '100%', height: '400px' }}></div>
-      <LineChart
-      width={500}
-      height={300}
-      data={timeSeriesData}
-      margin={{
-        top: 5, right: 30, left: 20, bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
-    </LineChart>
+    <div>
+      <div className="container-xl">
+        <div id="map" style={{ width: '100%', height: '400px' }}></div>
+      </div>
 
-    </>
+      <div className="container-xxl">
+        <div style={{ width: '100%', height: '400px' }}>
+          <ResponsiveContainer>
+            <LineChart
+              data={timeSeriesData}
+              margin={{ top: 20, right: 80, left: 50, bottom: 30 }}
+            >
+              <CartesianGrid strokeDasharray="5 5" />
+              <XAxis dataKey="date">
+                <Label value="Fecha" offset={-10} position="insideBottom" />
+              </XAxis>
+              <YAxis label={{ value: 'Valor', angle: -90, position: 'insideLeft' }} />
+              <Tooltip formatter={(value) => [value, 'Valor']} labelFormatter={(label) => `Fecha: ${label}`} />
+              <Legend verticalAlign="top" height={36} />
+              <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
   );
-}
-
+};
 export default MapComponent;

@@ -1,0 +1,20 @@
+.section-title {
+  color: #901f16;
+  margin: 0;
+  padding: 20px;
+}
+
+.custom-img-style {
+  opacity: 0.8;
+}
+
+.support-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.text-center {
+  text-align: center;
+}
