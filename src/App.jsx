@@ -9,18 +9,24 @@ import Territorios from "./Pages/territorios";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
 import Espacios from "./Pages/Espacios";
 import Footer from "./shared/footer/footer.jsx";
+
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
+      <div className="app-container">
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/proyecto" element={<Proyecto />} />
-        <Route path="/territorios" element={<Territorios />} />
-        <Route path="/espacios" element={<Espacios />} />
-      </Routes>
-      <Footer />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/proyecto" element={<Proyecto />} />
+            <Route path="/territorios" element={<Territorios />} />
+            <Route path="/espacios" element={<Espacios />} />
+          </Routes>
+        </div>
+
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }

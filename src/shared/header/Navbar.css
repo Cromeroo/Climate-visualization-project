@@ -1,7 +1,7 @@
 .appbar {
-  background-color: #F5F5DC; /* Color principal (Beige claro) */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para un efecto de elevación */
-  padding: 20px 0; /* Aumenta el grosor de la barra de navegación */
+  background-color: #F5F5DC;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  padding: 20px 0;
 }
 
 .toolbar {
@@ -11,17 +11,17 @@
 }
 
 .logo {
-  height: 70px; /* Aumenta el tamaño del logo */
+  height: 70px; 
   margin-right: 10px;
 }
 
 .drawer-logo {
-  height: 70px; /* Aumenta el tamaño del logo en el drawer */
+  height: 70px;
   margin: 10px auto;
 }
 
 .title {
-  color: #8B0000; /* Color del texto */
+  color: #8B0000; 
   text-decoration: none;
   font-weight: bold;
 }
@@ -34,11 +34,11 @@
 }
 
 .menu-section .MuiButton-root {
-  color: #8B0000; /* Color del texto */
+  color: #8B0000; 
 }
 
 .menu-section .MuiButton-root:hover {
-  background-color: #FF8C00; /* Color al pasar el cursor (Naranja de las llamas) */
+  background-color: #FF8C00;
 }
 
 .menu-section .MuiIconButton-root {
@@ -51,9 +51,9 @@
 }
 
 .MuiDrawer-paper {
-  background-color: #FFFFFF; /* Fondo del Drawer */
+  background-color: #FFFFFF; 
 }
 
 .ListItemText-primary {
-  color: #000000; /* Color del texto en el Drawer */
+  color: #000000; 
 }

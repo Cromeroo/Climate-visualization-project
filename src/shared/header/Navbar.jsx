@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import logoTCVR from "../../images/logoTCVR.png";
+import logoTCVR from "../../assets/images/logoTCVR.png";
 import "./Navbar.css";
 
 function MyNavbar() {
@@ -131,18 +131,21 @@ function MyNavbar() {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": { boxSizing: "border-box", width: 240 },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: 240,
+              backgroundColor: "#F5F5DC",
+            },
           }}
         >
           {drawer}
         </Drawer>
       </Box>
-      <Box sx={{ marginTop: 4 }}></Box>{" "}
-      {/* Añadir margen para separar el navbar de los componentes de abajo */}
+      <Box sx={{ marginTop: 4 }}></Box>
     </>
   );
 }

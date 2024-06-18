@@ -1,5 +1,4 @@
 import React from "react";
-import Comment from "../comment/comment";
 import Drawer from "../components/drawer";
 
 function HomePage() {

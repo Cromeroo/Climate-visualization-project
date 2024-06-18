@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Imagen3 from "../images/imagenes3.png";
+import Imagen3 from "../../src/assets/images/imagenes3.png";
 const TextSlider = () => {
   const textos = [
     <div className="cont">

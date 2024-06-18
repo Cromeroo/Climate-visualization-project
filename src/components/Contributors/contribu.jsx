@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../images/logoTCVR.png";
+import logo from "../../assets/images/logoTCVR.png";
 import ImageSection from "./ImageSection";
 import "./contributors.css";
 

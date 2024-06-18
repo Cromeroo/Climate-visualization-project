@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Mapa from "../../Mapa/Mapa";
 import LayerSelector from "../../Mapa/LayerSelector";
-import Drawer from "../../components/drawert";
 import { IconButton } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Section from "../../components/section";

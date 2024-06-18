@@ -70,20 +70,19 @@ function LayerSelector({
     isLayerVisible
   );
 
-  // Función intermedia para manejar el cambio de capa y agregar el console.log
   const handleLayerChange = (e) => {
     const newLayerType = e.target.value;
     const layerName = e.target.value;
     const isChecked = e.target.checked;
-    console.log("Capa seleccionada:", newLayerType); // Aquí se muestra el valor seleccionado en la consola
-    changeLayer(e); // Llamada a la función original pasada como prop para manejar el cambio de capa
+    console.log("Capa seleccionada:", newLayerType); 
+    changeLayer(e); 
     setSelectedLayer(newLayerType);
     onVisibilityChange(newLayerType, e.target.checked);
     console.log("Cambiando visibilidad de", layerName, "a", isChecked);
     onVisibilityChange(layerName, isChecked);
 
     console.log("Capa seleccionada:", layerName, "; Estado:", isChecked);
-    changeLayer(e); // Llamada a la función original pasada como prop para manejar el cambio de capa
+    changeLayer(e); 
     handleVisibilityChange(layerName, isChecked);
 
     setLayersChecked((prev) => {
@@ -92,7 +91,6 @@ function LayerSelector({
       return newState;
     });
 
-    // Llama a la función para manejar la visibilidad de la capa
     onVisibilityChange(layerName, isChecked);
   };
 

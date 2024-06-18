@@ -49,7 +49,7 @@ body {
 
 
 .App {
-  background: linear-gradient(rgba(117, 185, 185, 0.3), rgba(20,20,20, .9)), url('./images/fondo.png');
+  background: linear-gradient(rgba(117, 185, 185, 0.3), rgba(20,20,20, .9)), url('./assets/images/fondo.png');
   background-color: gainsboro;
   background-repeat: repeat-y;
   background-position: center;
@@ -67,7 +67,6 @@ body {
 }
 
 
-/* Color of the links BEFORE scroll */
 .navbar-scroll .nav-link,
 .navbar-scroll .fa-bars,
 .navbar-scroll .navar-brand {
@@ -85,7 +84,6 @@ body {
   color: #4f4f4f;
 }
 
-/* Color of the navbar AFTER scroll */
 .navbar-scroll,
 .navbar-scrolled {
   background-color: #fff;
