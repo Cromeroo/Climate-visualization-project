@@ -1,8 +1,8 @@
 import React from "react";
-import Fade from "react-reveal/Fade";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
-const SectionContainer = styled.div`
+const SectionContainer = styled(motion.div)`
   padding: 20px;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.8);
@@ -35,12 +35,14 @@ const Content = styled.p`
 `;
 
 const Section = ({ title, content, image }) => (
-  <Fade bottom>
-    <SectionContainer>
-      <Title>{title}</Title>
-      <Content>{content}</Content>
-    </SectionContainer>
-  </Fade>
+  <SectionContainer
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+  >
+    <Title>{title}</Title>
+    <Content>{content}</Content>
+  </SectionContainer>
 );
 
 export default Section;
