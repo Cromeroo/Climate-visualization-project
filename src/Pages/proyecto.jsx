@@ -1,16 +1,18 @@
 import React from "react";
-import Tiempo from "../Mapa/tiempo2";
-
-import Drawert from "../components/FullScreenSlider/FullScreenSlider";
-
-function HomePage() {
+import sectionsData from "../components/SectionData/sectionData";
+import Section from "../components/SectionData/Section";
+function proyecto() {
   return (
     <div>
-      <div style={{ paddingBottom: "20px" }}>
-        <Drawert />
-      </div>
+      {sectionsData.map((section, index) => (
+        <Section
+          key={index}
+          title={section.title}
+          content={section.content}
+          image={section.image}
+        />
+      ))}
     </div>
   );
 }
-
-export default HomePage;
+export default proyecto;

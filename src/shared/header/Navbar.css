@@ -1,17 +1,18 @@
 .appbar {
   background-color: #F5F5DC;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  padding: 20px 0;
+
 }
 
 .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 
 .logo {
-  height: 70px; 
+  height: 90px; 
   margin-right: 10px;
 }
 

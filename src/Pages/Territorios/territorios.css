@@ -1,0 +1,21 @@
+
+.biodiversidad-container {
+  width: 100%;
+  max-width: 1800px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+}
+.biodiversidad-title {
+  color: #8B0000; 
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background: rgba(255, 255, 255, 0);
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

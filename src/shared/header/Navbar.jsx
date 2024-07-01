@@ -33,8 +33,8 @@ function MyNavbar() {
         <ListItem button component={Link} to="/territorios">
           <ListItemText primary="Territorios" />
         </ListItem>
-        <ListItem button component={Link} to="/espacios">
-          <ListItemText primary="Espacios de cocreación" />
+        <ListItem button component={Link} to="/biodiversidad">
+          <ListItemText primary="Biodiversidad" />
         </ListItem>
         <ListItem button component={Link} to="/variabilidad-climatica">
           <ListItemText primary="Variabilidad climática" />
@@ -48,12 +48,8 @@ function MyNavbar() {
 
   return (
     <>
-      <AppBar
-        position="static"
-        sx={{ backgroundColor: "#F5F5DC", paddingY: 2 }}
-      >
-        {" "}
-        <Toolbar className="toolbar">
+      <AppBar position="static" sx={{ backgroundColor: "#F5F5DC", margin: 0 }}>
+        <Toolbar className="toolbar" sx={{ padding: 0 }}>
           <IconButton
             edge="start"
             color="inherit"
@@ -76,6 +72,7 @@ function MyNavbar() {
                 textDecoration: "none",
                 marginLeft: 1,
                 fontWeight: "bold",
+                fontSize: "1.5rem",
               }}
             >
               Territorio, comida y vida
@@ -101,7 +98,7 @@ function MyNavbar() {
             <Button
               color="inherit"
               component={Link}
-              to="/espacios"
+              to="/biodiversidad"
               sx={{ color: "#8B0000", fontWeight: "bold" }}
             >
               Biodiversidad
@@ -124,6 +121,9 @@ function MyNavbar() {
             </Button>
           </Box>
         </Toolbar>
+        <Box
+          sx={{ height: "5px", backgroundColor: "#8BC34A", marginTop: "auto" }}
+        />
       </AppBar>
       <Box component="nav">
         <Drawer
@@ -145,7 +145,7 @@ function MyNavbar() {
           {drawer}
         </Drawer>
       </Box>
-      <Box sx={{ marginTop: 4 }}></Box>
+      <Box sx={{ marginTop: 0 }}></Box>
     </>
   );
 }
