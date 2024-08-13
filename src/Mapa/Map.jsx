@@ -20,8 +20,8 @@ function MapComponent({ layerType, isLayerVisible }) {
       layers: [raster],
       target: "map",
       view: new View({
-        center: transform([-77.0197, 2.7738], "EPSG:4326", "EPSG:3857"),
-        zoom: 8,
+        center: transform([-77.8033, 1.3311], "EPSG:4326", "EPSG:3857"),
+        zoom: 10,
       }),
     });
   }, []);

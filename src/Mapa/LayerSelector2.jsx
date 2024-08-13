@@ -14,7 +14,7 @@ const StyledLayerSelector = styled.div`
   background-color: #ffffff;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
-  max-height: 78vh;
+  max-height: 62vh;
   overflow-y: auto;
 
   @media (max-width: 768px) {
