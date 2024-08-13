@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Carousel from "../../components/Carousel_Img/Carousel";
 import images from "../../components/Carousel_Img/images";
 import "./territorios.css";
-function territorios() {
+function Territorios() {
   console.log("Componente Biodiversidad renderizado");
   return (
     <div>
@@ -21,4 +21,4 @@ function territorios() {
   );
 }
 
-export default territorios;
+export default Territorios;
