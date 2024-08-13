@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Mapa from "../../Mapa/Mapa";
-import LayerSelector from "../../Mapa/LayerSelector";
+import Map from "../../Mapa/Map";
+import LayerSelector2 from "../../Mapa/LayerSelector2";
 import { IconButton } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import Section from "../../components/section";
 import Contribu from "../../components/Contributors/contribu";
-import "./HomePage.css";
 
-function HomePage() {
+function Variabilidad() {
   const [layerType, setLayerType] = useState("coords");
   const [showLayerSelector, setShowLayerSelector] = useState(false);
 
@@ -24,7 +23,16 @@ function HomePage() {
     Resguardos: false,
     Departamentos: false,
     Mpiosparticipación: false,
+    A1: false,
     A12: false,
+    A1ssp126: false,
+    A12ssp126: false,
+    A1ssp245: false,
+    A12ssp245: false,
+    A1ssp370: false,
+    A12ssp370: false,
+    A1ssp585: false,
+    A12ssp585: false,
   });
 
   const handleVisibilityChange = (layerId, isVisible) => {
@@ -53,7 +61,7 @@ function HomePage() {
       <div className="contenedor">
         {showLayerSelector && (
           <div className="layer-selector">
-            <LayerSelector
+            <LayerSelector2
               layerType={layerType}
               changeLayer={changeLayer}
               isLayerVisible={isLayerVisible}
@@ -79,22 +87,15 @@ function HomePage() {
           >
             <InfoIcon />
           </IconButton>
-          <Mapa
+          <Map
             layerType={layerType}
             isLayerVisible={isLayerVisible}
             layersVisibility={layersVisibility}
           />
         </div>
       </div>
-
-      <div>
-        <Section />
-      </div>
-      <div>
-        <Contribu />
-      </div>
     </>
   );
 }
 
-export default HomePage;
+export default Variabilidad;

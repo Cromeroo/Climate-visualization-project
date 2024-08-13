@@ -126,13 +126,10 @@ html, body {
 
 
 .toolbox {
-  position:absolute;
   z-index:1;
-  left: 270px;
+  left: 220px;
   width: 50%;
   height: 46%;
-  background-color: rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(190, 190, 190), 0.3em 0.3em 1em rgba(0,0,0,0.3);
   font-size: 16px;
   color: #333;
   text-align: center;
@@ -158,14 +155,7 @@ html, body {
 
 
 
-.toolbox button {
-  padding: 5px 10px;
-  margin-top: 10px;
-  border: none;
-  background-color: blue;
-  color: white;
-  cursor: pointer;
-}
+
 .toolbox:hover {
   background-color: #eaeaea94;
   transition: background-color 0.3s;
@@ -298,7 +288,6 @@ html, body {
   color: #1266f1;
 }
 
-/* Color of the links AFTER scroll */
 .navbar-scrolled .nav-link,
 .navbar-scrolled .fa-bars,
 .navbar-scrolled .navar-brand {
@@ -480,7 +469,6 @@ html, body {
   color: white;
 }
 
-.maxTemp,
 .minTemp {
   font-size: 0.6em;
   font-weight: 500;
@@ -488,9 +476,4 @@ html, body {
 }
 
 
-
-
-.enviar-btn:hover {
-  background-color: #0056b3;
-}
 

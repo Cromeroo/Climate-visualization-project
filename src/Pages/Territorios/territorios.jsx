@@ -14,6 +14,8 @@ function territorios() {
         <div style={{ width: "100%", maxWidth: "1800px", margin: "0 auto" }}>
           <Carousel images={images} />
         </div>
+
+        <div></div>
       </div>
     </div>
   );

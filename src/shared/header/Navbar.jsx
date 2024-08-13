@@ -36,7 +36,7 @@ function MyNavbar() {
         <ListItem button component={Link} to="/biodiversidad">
           <ListItemText primary="Biodiversidad" />
         </ListItem>
-        <ListItem button component={Link} to="/variabilidad-climatica">
+        <ListItem button component={Link} to="/Variabilidad">
           <ListItemText primary="Variabilidad climática" />
         </ListItem>
         <ListItem button component={Link} to="/indicadores-climaticos">
@@ -106,7 +106,7 @@ function MyNavbar() {
             <Button
               color="inherit"
               component={Link}
-              to="/variabilidad-climatica"
+              to="/Variabilidad"
               sx={{ color: "#8B0000", fontWeight: "bold" }}
             >
               Variabilidad climática

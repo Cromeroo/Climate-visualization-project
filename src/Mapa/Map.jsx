@@ -1,138 +1,211 @@
-import React, { useEffect, useRef,useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer } from 'recharts';
+import React, { useEffect, useRef, useCallback } from "react";
+import "ol/ol.css";
+import { Map, View } from "ol";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import GeoJSON from "ol/format/GeoJSON";
+import TileLayer from "ol/layer/Tile";
+import OSM from "ol/source/OSM";
+import { transform } from "ol/proj";
+import { Style, Fill, Stroke, Text } from "ol/style";
 
-import 'ol/ol.css';
-
-
-function MapComponent({ layerType,isLayerVisible,layersVisibility  }) { 
-  console.log(`Sending: ${layerType}`);
-  const [timeSeriesData, setTimeSeriesData] = useState([]);
-
-
-
-  const layerTypeRef = useRef(layerType);
-
-
-  useEffect(() => {
-    layerTypeRef.current = layerType;
-  }, [layerType]);
-
-
-  const api_url = "http://127.0.0.1:5000/";
-  const mapRef = useRef(null);  
-  const drawRef = useRef(null);
-
+function MapComponent({ layerType, isLayerVisible }) {
+  const mapRef = useRef(null);
+  const cachedLayers = useRef({});
 
   useEffect(() => {
-    loadMap("map", ol.proj.transform([-77.0197, 2.7738], 'EPSG:4326', 'EPSG:3857'), 8);
+    const raster = new TileLayer({ source: new OSM() });
 
+    mapRef.current = new Map({
+      layers: [raster],
+      target: "map",
+      view: new View({
+        center: transform([-77.0197, 2.7738], "EPSG:4326", "EPSG:3857"),
+        zoom: 8,
+      }),
+    });
   }, []);
 
-
-  function loadMap(target, center, zoom) {
-    const raster = new ol.layer.Tile({
-      source: new ol.source.OSM()
-    });
-    mapRef.current = new ol.Map({
-      layers: [raster],
-      target: target,
-      view: new ol.View({
-          center: center,
-          zoom: zoom
-      })
-    });
-
-    // Agregar funcionalidad de dibujo
-    addDrawFunctionality(mapRef.current);
-  }
-
-  function addDrawFunctionality(map) {
-    const source = new ol.source.Vector({wrapX: false});
-    const vector = new ol.layer.Vector({
-      source: source
-    });
-    map.addLayer(vector);
-
-    const draw = new ol.interaction.Draw({
-      source: source,
-      type: 'Polygon',
-      contrast: 0.2
-    });
-
-    drawRef.current = draw;
-    map.addInteraction(draw);
-
-    draw.on('drawend', (event) => {
-      const coordinates = event.feature.getGeometry().getCoordinates();
-      const transformedCoords = coordinates[0].map(coord => ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326'));
-      
-      sendPolygonToServer(transformedCoords);
-    });
-  }
-  function sendPolygonToServer(transformedCoords) {
-    const payload = {
-      coordinates: [transformedCoords], // La API espera un array de arrays de coordenadas
-      dateFrom: '2020-01-01', // Establece tus propias fechas
-      dateTo: '2020-12-31',
-      indexName: 'NDVI', // O cualquier índice que necesites
-    };
-  
-    fetch(api_url + 'timeSeriesIndex', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+  // Función para obtener el color basado en el valor y las reglas
+  const getColorForValue = (value, rules) => {
+    for (const rule of rules) {
+      if (value >= rule.threshold) {
+        return rule.color;
       }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Success:', data);
-      if (data.timeSeries && Array.isArray(data.timeSeries)) {
-        const formattedData = data.timeSeries.map(item => ({
-          date: new Date(item.date).toLocaleDateString(), // Asegúrate de que esto se ajusta a tus necesidades
-          value: item.value,
-        }));
-        setTimeSeriesData(formattedData);
-      } else {
-        throw new Error('Data format is incorrect or timeSeries is missing');
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
+    }
+    return rules[rules.length - 1].color; // Color por defecto si no se cumple ninguna regla
+  };
+
+  // Reglas para A1
+  const colorRulesA1 = [
+    { threshold: 23.3, color: "rgba(139, 0, 0, 0.8)" }, // Rojo oscuro
+    { threshold: 19.9, color: "rgba(220, 20, 60, 0.8)" }, // Rojo
+    { threshold: 16.2, color: "rgba(255, 99, 71, 0.8)" }, // Tomate
+    { threshold: 11.8, color: "rgba(255, 160, 122, 0.8)" }, // Salmón claro
+    { threshold: 0, color: "rgba(255, 182, 193, 0.8)" }, // Rosa claro
+  ];
+
+  // Reglas para A12
+  const colorRulesA12 = [
+    { threshold: 3029.0, color: "rgba(0, 0, 139, 0.8)" }, // Azul oscuro
+    { threshold: 2036.1, color: "rgba(0, 0, 205, 0.8)" }, // Azul medio
+    { threshold: 1658.1, color: "rgba(30, 144, 255, 0.8)" }, // Azul dodger
+    { threshold: 1513.1, color: "rgba(135, 206, 235, 0.8)" }, // Azul cielo claro
+    { threshold: 0, color: "rgba(173, 216, 230, 0.8)" }, // Azul claro
+  ];
+
+  // Función de estilo para capas basada en el valor y las reglas
+  const createStyleFunctionForValue = (rules) => (feature) => {
+    const value = feature.get("value");
+    const color = getColorForValue(value, rules);
+
+    return new Style({
+      fill: new Fill({ color: color }),
+      stroke: new Stroke({ color: "#319FD3", width: 1 }),
+      text: new Text({
+        text: value ? value.toFixed(1) : "",
+        fill: new Fill({ color: "#000" }),
+        stroke: new Stroke({ color: "#fff", width: 3 }),
+        font: "14px Calibri,sans-serif",
+      }),
     });
-  }
+  };
 
-  return (
-    <div>
-      <div className="container-xl">
-        <div id="map" style={{ width: '100%', height: '400px' }}></div>
-      </div>
-
-      <div className="container-xxl">
-        <div style={{ width: '100%', height: '400px' }}>
-          <ResponsiveContainer>
-            <LineChart
-              data={timeSeriesData}
-              margin={{ top: 20, right: 80, left: 50, bottom: 30 }}
-            >
-              <CartesianGrid strokeDasharray="5 5" />
-              <XAxis dataKey="date">
-                <Label value="Fecha" offset={-10} position="insideBottom" />
-              </XAxis>
-              <YAxis label={{ value: 'Valor', angle: -90, position: 'insideLeft' }} />
-              <Tooltip formatter={(value) => [value, 'Valor']} labelFormatter={(label) => `Fecha: ${label}`} />
-              <Legend verticalAlign="top" height={36} />
-              <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </div>
+  // Función de estilo general para otras capas
+  const createStyleFunction = useCallback(
+    (property) => (feature) => {
+      return new Style({
+        fill: new Fill({ color: "rgba(255, 255, 255, 0.6)" }),
+        stroke: new Stroke({ color: "#319FD3", width: 1 }),
+        text: new Text({
+          text: feature.get(property),
+          fill: new Fill({ color: "#000" }),
+          stroke: new Stroke({ color: "#fff", width: 3 }),
+          font: "24px Calibri,sans-serif",
+        }),
+      });
+    },
+    []
   );
-};
+
+  const loadDataAndCreateLayer = useCallback(
+    (url, styleFunction, layerId, visibility) => {
+      if (cachedLayers.current[layerId]) {
+        cachedLayers.current[layerId].setVisible(visibility);
+      } else {
+        fetch(url)
+          .then((response) => response.json())
+          .then((geojsonData) => {
+            const vectorSource = new VectorSource({
+              features: new GeoJSON().readFeatures(geojsonData, {
+                dataProjection: "EPSG:4326",
+                featureProjection: "EPSG:3857",
+              }),
+            });
+
+            const vectorLayer = new VectorLayer({
+              source: vectorSource,
+              style: styleFunction,
+              id: layerId,
+              visible: visibility,
+            });
+
+            mapRef.current.addLayer(vectorLayer);
+            cachedLayers.current[layerId] = vectorLayer;
+          })
+          .catch((error) =>
+            console.error(`Error loading GeoJSON data for ${layerId}:`, error)
+          );
+      }
+    },
+    []
+  );
+
+  const layersData = [
+    {
+      url: "https://cromeroo.github.io/Capas/resguardos.geojson",
+      property: "NOMBRE",
+      id: "Resguardos",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/LimiteDep.geojson",
+      property: "DeNombre",
+      id: "Departamentos",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/Mparticipación.geojson",
+      property: "MpNombre",
+      id: "Mpiosparticipación",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/A1.geojson",
+      property: "MpNombre",
+      id: "A1",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/A12.geojson",
+      property: "MpNombre",
+      id: "A12",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp126/A1.geojson",
+      property: "MpNombre",
+      id: "A1ssp126",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp126/A12.geojson",
+      property: "MpNombre",
+      id: "A12ssp126",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp245/A1.geojson",
+      property: "MpNombre",
+      id: "A1ssp245",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp245/A12.geojson",
+      property: "MpNombre",
+      id: "A12ssp245",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp370/A1.geojson",
+      property: "MpNombre",
+      id: "A1ssp370",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp370/A12.geojson",
+      property: "MpNombre",
+      id: "A12ssp370",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp585/A1.geojson",
+      property: "MpNombre",
+      id: "A1ssp585",
+    },
+    {
+      url: "https://cromeroo.github.io/Capas/ssp585/A12.geojson",
+      property: "MpNombre",
+      id: "A12ssp585",
+    },
+  ];
+
+  const loadLayers = useCallback(() => {
+    layersData.forEach(({ url, property, id }) => {
+      const styleFunction = /^A1(?!2)/.test(id)
+        ? createStyleFunctionForValue(colorRulesA1)
+        : /^A12/.test(id)
+        ? createStyleFunctionForValue(colorRulesA12)
+        : createStyleFunction(property);
+
+      loadDataAndCreateLayer(url, styleFunction, id, isLayerVisible[id]);
+    });
+  }, [isLayerVisible, createStyleFunction]);
+
+  useEffect(() => {
+    loadLayers();
+  }, [loadLayers]);
+
+  return <div id="map" style={{ width: "100%", height: "600px" }}></div>;
+}
+
 export default MapComponent;

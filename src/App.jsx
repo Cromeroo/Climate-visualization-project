@@ -5,10 +5,11 @@ import Navbar from "./shared/header/Navbar.jsx";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Proyecto from "./Pages/proyecto";
-import Territorios from "./Pages/Territorios/territorios.jsx";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
 import Biodiversidad from "./Pages/Biodiversidad/Biodiversidad.jsx";
 import Footer from "./shared/footer/footer.jsx";
+import Territorios from "./Pages/Territorios/Territorios.jsx";
+import Variabilidad from "./Pages/Variabilidad-C/Variabilidad.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/proyecto" element={<Proyecto />} />
             <Route path="/territorios" element={<Territorios />} />
             <Route path="/biodiversidad" element={<Biodiversidad />} />
+            <Route path="/Variabilidad" element={<Variabilidad />} />
           </Routes>
         </div>
 

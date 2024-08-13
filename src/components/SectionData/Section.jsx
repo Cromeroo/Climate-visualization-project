@@ -20,18 +20,22 @@ const Image = styled.img`
 
 const Title = styled.h2`
   font-size: 24px;
+  max-width: 60ch;
+  text-align: center;
+  margin: 0 auto;
+
   color: #8b0000;
-  margin: 20px 0 10px;
 `;
 
 const Content = styled.p`
   white-space: pre-wrap;
   text-align: justify;
   color: #333;
+  max-width: 100ch;
+
   font-size: 18px;
   padding: 0 20px;
   margin: 0 auto;
-  max-width: 2000px;
 `;
 
 const Section = ({ title, content, image }) => (

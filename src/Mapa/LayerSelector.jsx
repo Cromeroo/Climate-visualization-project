@@ -1,41 +1,48 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { Container, Row, Col, Form, FormCheck } from "react-bootstrap";
 
 const StyledLayerSelector = styled.div`
   position: relative;
-  padding: 3px;
-  border: 1px solid;
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 5px;
   text-align: center;
-  width: 56%;
-  top: 20px;
-  left: 198px;
+  width: 100%;
+  margin: 20px auto;
+  background-color: #f9f9f9;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 1708px) {
     top: -30%;
     left: 174px;
     padding: 6px;
+    width: 100%;
   }
+
   @media (max-width: 900px) {
     top: -25%;
     left: 280px;
     padding: 6px;
+    width: 100%;
   }
 
   @media (max-width: 768px) {
     top: -15%;
     left: 90px;
     padding: 6px;
+    width: fit-content;
   }
 
   @media (max-width: 480px) {
     position: absolute;
-    height: 350px;
-    width: 150px;
+    height: auto;
+    width: fit-content;
     top: 20px;
-    left: 60px;
+    left: 5%;
     padding: 10px;
   }
+
   ${(props) =>
     props.$isMinimized &&
     `
@@ -51,58 +58,46 @@ function LayerSelector({
   onVisibilityChange,
 }) {
   const [isMinimized, setIsMinimized] = useState(false);
-  const capasDeseadas = ["Resguardos", "Departamentos", "Mpiosparticipación"];
-  // Estado para controlar la minimización
+  const capasDeseadas = [
+    "Resguardos",
+    "Departamentos",
+    "Mpiosparticipación",
+    "A12",
+  ];
   const [selectedLayer, setSelectedLayer] = useState("");
   const [layersChecked, setLayersChecked] = useState({
     precipitation: false,
     prueba: false,
   });
+
   const handleVisibilityChange = (layerName, isVisible) => {
-    console.log("Cambiando visibilidad de", layerName, "a", isVisible);
     setIsLayerVisible((prevState) => ({
       ...prevState,
       [layerName]: isVisible,
     }));
   };
-  console.log(
-    "Estado inicial de isLayerVisible en LayerSelector:",
-    isLayerVisible
-  );
 
   const handleLayerChange = (e) => {
     const newLayerType = e.target.value;
     const layerName = e.target.value;
     const isChecked = e.target.checked;
-    console.log("Capa seleccionada:", newLayerType); 
-    changeLayer(e); 
+    changeLayer(e);
     setSelectedLayer(newLayerType);
     onVisibilityChange(newLayerType, e.target.checked);
-    console.log("Cambiando visibilidad de", layerName, "a", isChecked);
-    onVisibilityChange(layerName, isChecked);
-
-    console.log("Capa seleccionada:", layerName, "; Estado:", isChecked);
-    changeLayer(e); 
     handleVisibilityChange(layerName, isChecked);
-
-    setLayersChecked((prev) => {
-      const newState = { ...prev, [layerName]: isChecked };
-      console.log(newState); // Verificar el nuevo estado
-      return newState;
-    });
-
+    setLayersChecked((prev) => ({ ...prev, [layerName]: isChecked }));
     onVisibilityChange(layerName, isChecked);
   };
 
   return (
     <StyledLayerSelector $isMinimized={isMinimized} className="toolbox">
-      <div>
-        <div className="row mt-3 d-flex justify-content-center">
-          <div className="col-9">
-            <label className="form-label">
-              <strong>Capa </strong>:
-            </label>
-            <select
+      <Container>
+        <Row className="mt-3 d-flex justify-content-center">
+          <Col xs={9}>
+            <Form.Label>
+              <strong>Capa</strong>:
+            </Form.Label>
+            <Form.Select
               className="form-select"
               onChange={handleLayerChange}
               value={layerType}
@@ -110,77 +105,71 @@ function LayerSelector({
               <option value="coords">Temperatura</option>
               <option value="precipitation">Precipitación</option>
               <option value="prueba">Cobertura Vegetal</option>
-            </select>
-          </div>
-        </div>
-        <div className="checkbox-container">
-          <label>
-            <input
+            </Form.Select>
+          </Col>
+        </Row>
+
+        <Row className="checkbox-container">
+          <Col>
+            <FormCheck
               type="checkbox"
               value="coords"
+              label="Temperatura"
               checked={layersChecked["coords"] || false}
               onChange={handleLayerChange}
             />
-            Temperatura
-          </label>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="checkbox-container">
-          <label>
-            <input
+        <Row className="checkbox-container">
+          <Col>
+            <FormCheck
               type="checkbox"
               value="precipitation"
+              label="Precipitación"
               checked={layersChecked["precipitation"] || false}
               onChange={handleLayerChange}
             />
-            Precipitación
-          </label>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="checkbox-container">
-          <label>
-            <input
+        <Row className="checkbox-container">
+          <Col>
+            <FormCheck
               type="checkbox"
               value="prueba"
+              label="Cobertura Vegetal"
               checked={layersChecked["prueba"] || false}
               onChange={handleLayerChange}
             />
-            Cobertura Vegetal
-          </label>
-        </div>
+          </Col>
+        </Row>
+
         <hr />
 
-        <div className="row mb-3 justify-content-center">
-          <div className="col-9">
-            <label className="form-label">
+        <Row className="mb-3 justify-content-center">
+          <Col xs={9}>
+            <Form.Label>
               <strong>Capa Base</strong>:
-            </label>
-          </div>
-
-          <div className="col-9">
-            {/* Checkbox para la visibilidad de la capa de Departamentos */}
+            </Form.Label>
             <div>
-              {/* Otros controles */}
               {Object.entries(isLayerVisible)
-                .filter(([layerId, _]) => capasDeseadas.includes(layerId)) // Filtra solo las capas deseadas
+                .filter(([layerId, _]) => capasDeseadas.includes(layerId))
                 .map(([layerId, isVisible]) => (
-                  <label key={layerId}>
-                    {layerId}
-                    <input
-                      type="checkbox"
-                      checked={isVisible}
-                      onChange={(e) =>
-                        handleVisibilityChange(layerId, e.target.checked)
-                      }
-                    />
-                  </label>
+                  <FormCheck
+                    key={layerId}
+                    type="checkbox"
+                    label={layerId}
+                    checked={isVisible}
+                    onChange={(e) =>
+                      handleVisibilityChange(layerId, e.target.checked)
+                    }
+                  />
                 ))}
             </div>
-          </div>
-
-          <div className="col-9"></div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     </StyledLayerSelector>
   );
 }
