@@ -8,7 +8,7 @@ import Proyecto from "./Pages/proyecto";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
 import Biodiversidad from "./Pages/Biodiversidad/Biodiversidad.jsx";
 import Footer from "./shared/footer/footer.jsx";
-import Territorios from "./Pages/Territorios/Territorios.jsx";
+import Territorios from "././Pages/Territorios/Territorios.jsx";
 import Variabilidad from "./Pages/Variabilidad-C/Variabilidad.jsx";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/proyecto" element={<Proyecto />} />
-            <Route path="/territorios" element={<Territorios />} />
+            <Route path="/Territorios" element={<Territorios />} />
             <Route path="/biodiversidad" element={<Biodiversidad />} />
             <Route path="/Variabilidad" element={<Variabilidad />} />
           </Routes>
