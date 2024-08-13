@@ -8,7 +8,7 @@ function Territorios() {
     <div>
       <div className="biodiversidad-container">
         <h2 className="biodiversidad-title">
-          Silvia (Cauca) - Comunidades Misak y Ampiuile
+          Silvia (Cauca) - Comunidades Misak y Ampiuile .
         </h2>
 
         <div style={{ width: "100%", maxWidth: "1800px", margin: "0 auto" }}>
