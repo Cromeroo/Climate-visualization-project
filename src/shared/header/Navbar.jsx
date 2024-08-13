@@ -72,7 +72,7 @@ function MyNavbar() {
                 textDecoration: "none",
                 marginLeft: 1,
                 fontWeight: "bold",
-                fontSize: "1.5rem",
+                fontSize: { xs: "1.2rem", sm: "1.5rem" },
               }}
             >
               Territorio, comida y vida
