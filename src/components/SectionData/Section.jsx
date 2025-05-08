@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
@@ -23,8 +24,11 @@ const Title = styled.h2`
   max-width: 60ch;
   text-align: center;
   margin: 0 auto;
-
   color: #8b0000;
+`;
+
+const Separator = styled.div`
+  height: 18px;
 `;
 
 const Content = styled.p`
@@ -32,12 +36,12 @@ const Content = styled.p`
   text-align: justify;
   color: #333;
   max-width: 100ch;
-
   font-size: 18px;
   padding: 0 20px;
   margin: 0 auto;
 `;
 
+// eslint-disable-next-line react/prop-types
 const Section = ({ title, content, image }) => (
   <SectionContainer
     initial={{ opacity: 0, y: 20 }}
@@ -45,6 +49,7 @@ const Section = ({ title, content, image }) => (
     transition={{ duration: 0.6 }}
   >
     <Title>{title}</Title>
+    <Separator />
     <Content>{content}</Content>
   </SectionContainer>
 );

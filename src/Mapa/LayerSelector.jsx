@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Container, Row, Col, Form, FormCheck } from "react-bootstrap";
 
@@ -154,7 +154,7 @@ function LayerSelector({
             </Form.Label>
             <div>
               {Object.entries(isLayerVisible)
-                .filter(([layerId, _]) => capasDeseadas.includes(layerId))
+                .filter(([layerId]) => capasDeseadas.includes(layerId))
                 .map(([layerId, isVisible]) => (
                   <FormCheck
                     key={layerId}

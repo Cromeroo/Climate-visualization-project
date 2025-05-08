@@ -1,10 +1,32 @@
-import React from "react";
-import sectionsData from "../components/SectionData/sectionData";
+import { useEffect, useState } from "react";
+import { getContenido } from "../services/section";
 import Section from "../components/SectionData/Section";
-function proyecto() {
+
+function Proyecto() {
+  const [sections, setSections] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getContenido("proyecto")
+      .then((data) => {
+        // Si tu backend devuelve [{tipo, contenido}], puedes mapearlo a {title, content}
+        setSections(
+          data.map((item) => ({
+            title: item.tipo,
+            content: item.contenido,
+            // image: item.image, // si tienes imágenes en la BD
+          }))
+        );
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div>Cargando...</div>;
+
   return (
     <div>
-      {sectionsData.map((section, index) => (
+      {sections.map((section, index) => (
         <Section
           key={index}
           title={section.title}
@@ -15,4 +37,5 @@ function proyecto() {
     </div>
   );
 }
-export default proyecto;
+
+export default Proyecto;

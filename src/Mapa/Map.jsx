@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
+import PropTypes from "prop-types";
 import "ol/ol.css";
 import { Map, View } from "ol";
 import VectorLayer from "ol/layer/Vector";
@@ -9,7 +10,7 @@ import OSM from "ol/source/OSM";
 import { transform } from "ol/proj";
 import { Style, Fill, Stroke, Text } from "ol/style";
 
-function MapComponent({ layerType, isLayerVisible }) {
+function MapComponent({ isLayerVisible }) {
   const mapRef = useRef(null);
   const cachedLayers = useRef({});
 
@@ -26,41 +27,37 @@ function MapComponent({ layerType, isLayerVisible }) {
     });
   }, []);
 
-  // Función para obtener el color basado en el valor y las reglas
   const getColorForValue = (value, rules) => {
     for (const rule of rules) {
       if (value >= rule.threshold) {
         return rule.color;
       }
     }
-    return rules[rules.length - 1].color; // Color por defecto si no se cumple ninguna regla
+    return rules[rules.length - 1].color;
   };
 
-  // Reglas para A1
   const colorRulesA1 = [
-    { threshold: 23.3, color: "rgba(139, 0, 0, 0.8)" }, // Rojo oscuro
-    { threshold: 19.9, color: "rgba(220, 20, 60, 0.8)" }, // Rojo
-    { threshold: 16.2, color: "rgba(255, 99, 71, 0.8)" }, // Tomate
-    { threshold: 11.8, color: "rgba(255, 160, 122, 0.8)" }, // Salmón claro
-    { threshold: 0, color: "rgba(255, 182, 193, 0.8)" }, // Rosa claro
+    { threshold: 23.3, color: "rgba(139, 0, 0, 0.8)" },
+    { threshold: 19.9, color: "rgba(220, 20, 60, 0.8)" },
+    { threshold: 16.2, color: "rgba(255, 99, 71, 0.8)" },
+    { threshold: 11.8, color: "rgba(255, 160, 122, 0.8)" },
+    { threshold: 0, color: "rgba(255, 182, 193, 0.8)" },
   ];
 
-  // Reglas para A12
   const colorRulesA12 = [
-    { threshold: 3029.0, color: "rgba(0, 0, 139, 0.8)" }, // Azul oscuro
-    { threshold: 2036.1, color: "rgba(0, 0, 205, 0.8)" }, // Azul medio
-    { threshold: 1658.1, color: "rgba(30, 144, 255, 0.8)" }, // Azul dodger
-    { threshold: 1513.1, color: "rgba(135, 206, 235, 0.8)" }, // Azul cielo claro
-    { threshold: 0, color: "rgba(173, 216, 230, 0.8)" }, // Azul claro
+    { threshold: 3029.0, color: "rgba(0, 0, 139, 0.8)" },
+    { threshold: 2036.1, color: "rgba(0, 0, 205, 0.8)" },
+    { threshold: 1658.1, color: "rgba(30, 144, 255, 0.8)" },
+    { threshold: 1513.1, color: "rgba(135, 206, 235, 0.8)" },
+    { threshold: 0, color: "rgba(173, 216, 230, 0.8)" },
   ];
 
-  // Función de estilo para capas basada en el valor y las reglas
   const createStyleFunctionForValue = (rules) => (feature) => {
     const value = feature.get("value");
     const color = getColorForValue(value, rules);
 
     return new Style({
-      fill: new Fill({ color: color }),
+      fill: new Fill({ color }),
       stroke: new Stroke({ color: "#319FD3", width: 1 }),
       text: new Text({
         text: value ? value.toFixed(1) : "",
@@ -71,10 +68,9 @@ function MapComponent({ layerType, isLayerVisible }) {
     });
   };
 
-  // Función de estilo general para otras capas
   const createStyleFunction = useCallback(
-    (property) => (feature) => {
-      return new Style({
+    (property) => (feature) =>
+      new Style({
         fill: new Fill({ color: "rgba(255, 255, 255, 0.6)" }),
         stroke: new Stroke({ color: "#319FD3", width: 1 }),
         text: new Text({
@@ -83,8 +79,7 @@ function MapComponent({ layerType, isLayerVisible }) {
           stroke: new Stroke({ color: "#fff", width: 3 }),
           font: "24px Calibri,sans-serif",
         }),
-      });
-    },
+      }),
     []
   );
 
@@ -106,15 +101,21 @@ function MapComponent({ layerType, isLayerVisible }) {
             const vectorLayer = new VectorLayer({
               source: vectorSource,
               style: styleFunction,
-              id: layerId,
               visible: visibility,
             });
 
+            // Asignar manualmente el id como propiedad
+            vectorLayer.set("id", layerId);
+
+            if (!mapRef.current) return;
             mapRef.current.addLayer(vectorLayer);
             cachedLayers.current[layerId] = vectorLayer;
           })
           .catch((error) =>
-            console.error(`Error loading GeoJSON data for ${layerId}:`, error)
+            console.error(
+              `Error loading GeoJSON from ${url} (layerId: ${layerId}):`,
+              error
+            )
           );
       }
     },
@@ -199,13 +200,17 @@ function MapComponent({ layerType, isLayerVisible }) {
 
       loadDataAndCreateLayer(url, styleFunction, id, isLayerVisible[id]);
     });
-  }, [isLayerVisible, createStyleFunction]);
+  }, [isLayerVisible, createStyleFunction, loadDataAndCreateLayer]);
 
   useEffect(() => {
     loadLayers();
   }, [loadLayers]);
 
-  return <div id="map" style={{ width: "100%", height: "600px" }}></div>;
+  return <div id="map" style={{ width: "100%", height: "600px" }} />;
 }
+
+MapComponent.propTypes = {
+  isLayerVisible: PropTypes.object.isRequired,
+};
 
 export default MapComponent;

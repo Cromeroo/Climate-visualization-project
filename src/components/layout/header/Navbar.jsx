@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import logoTCVR from "../../assets/images/logoTCVR.png";
+import logoTCVR from "../../../assets/images/logoTCVR.png";
 import "./Navbar.css";
 
 function MyNavbar() {

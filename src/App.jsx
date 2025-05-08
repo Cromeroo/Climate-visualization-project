@@ -1,30 +1,19 @@
-import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "./shared/header/Navbar.jsx";
+import Navbar from "../src/components/layout/header/Navbar.jsx";
+import AppRoutes from "./routes/AppRoutes";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Proyecto from "./Pages/proyecto";
-import HomePage from "./Pages/HomePage/HomePage.jsx";
-import Biodiversidad from "./Pages/Biodiversidad/Biodiversidad.jsx";
-import Footer from "./shared/footer/footer.jsx";
-import Variabilidad from "./Pages/Variabilidad-C/Variabilidad.jsx";
+import { BrowserRouter } from "react-router-dom";
+import Footer from "./components/layout/footer/Footer.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="app-container">
         <Navbar />
-
         <div className="content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/proyecto" element={<Proyecto />} />
-            <Route path="/biodiversidad" element={<Biodiversidad />} />
-            <Route path="/Variabilidad" element={<Variabilidad />} />
-          </Routes>
+          <AppRoutes />
         </div>
-
         <Footer />
       </div>
     </BrowserRouter>
