@@ -9,7 +9,6 @@ function Proyecto() {
   useEffect(() => {
     getContenido("proyecto")
       .then((data) => {
-        // Si tu backend devuelve [{tipo, contenido}], puedes mapearlo a {title, content}
         setSections(
           data.map((item) => ({
             title: item.tipo,

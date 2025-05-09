@@ -1,11 +1,11 @@
-.login-bg {
+.register-bg {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.login-form {
+.register-form {
   background: #fff;
   padding: 2.5rem 2rem;
   border-radius: 1.2rem;
@@ -17,7 +17,7 @@
   gap: 1.2rem;
 }
 
-.login-title {
+.register-title {
   text-align: center;
   color: #4e54c8;
   margin-bottom: 1rem;
@@ -25,19 +25,19 @@
   font-size: 1.7rem;
 }
 
-.login-field {
+.register-field {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
 
-.login-field label {
+.register-field label {
   font-size: 0.95rem;
   color: #4e54c8;
   font-weight: 500;
 }
 
-.login-field input {
+.register-field input {
   padding: 0.7rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
@@ -46,12 +46,12 @@
   transition: border 0.2s;
 }
 
-.login-field input:focus {
+.register-field input:focus {
   border: 1.5px solid #4e54c8;
 }
 
-.login-btn {
-  background: linear-gradient(90deg, #ffffff00 0%, #242de9 100%);
+.register-btn {
+  background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
   color: #fff;
   border: none;
   border-radius: 0.5rem;
@@ -62,21 +62,22 @@
   transition: background 0.2s;
 }
 
-.login-btn:disabled {
+.register-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.login-error {
-  color: #e74c3c;
-  background: #fdecea;
+.register-msg {
+  color: #4e54c8;
+  background: #eaf6ff;
   border-radius: 0.4rem;
   padding: 0.5rem 0.8rem;
   font-size: 0.98rem;
   text-align: center;
 }
-/* login.css */
-.login-register-link {
+
+/* register.css */
+.register-login-link {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,7 +85,7 @@
   margin-top: 1rem;
 }
 
-.login-register-btn {
+.register-login-btn {
   background: none;
   border: none;
   color: #4e54c8;
@@ -96,6 +97,6 @@
   transition: color 0.2s;
 }
 
-.login-register-btn:hover {
+.register-login-btn:hover {
   color: #8f94fb;
 }

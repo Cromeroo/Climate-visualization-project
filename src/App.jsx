@@ -6,17 +6,21 @@ import AppRoutes from "./routes/AppRoutes";
 import { BrowserRouter } from "react-router-dom";
 import Footer from "./components/layout/footer/Footer.jsx";
 
+import { AuthProvider } from "./components/login/authcontext.jsx";
+
 function App() {
   return (
-    <BrowserRouter>
-      <div className="app-container">
-        <Navbar />
-        <div className="content">
-          <AppRoutes />
+    <AuthProvider>
+      <BrowserRouter>
+        <div className="app-container">
+          <Navbar />
+          <div className="content">
+            <AppRoutes />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

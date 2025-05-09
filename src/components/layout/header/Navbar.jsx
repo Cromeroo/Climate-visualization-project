@@ -1,48 +1,35 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Button,
   Drawer,
-  List,
-  ListItem,
-  ListItemText,
   Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import logoTCVR from "../../../assets/images/logoTCVR.png";
+import MenuButtons from "./MenuButtons";
+import DrawerMenu from "./DrawerMenu";
 import "./Navbar.css";
+import { menuItems, adminMenuItems } from "./menuItems";
+import LogoutButton from "./LogoutButton";
+import { useAuth } from "../../../components/login/useAuth";
 
 function MyNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { role, logout } = useAuth(); // SOLO el contexto
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+  const itemsToShow =
+    role === "admin" ? [...menuItems, ...adminMenuItems] : menuItems;
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <img src={logoTCVR} className="drawer-logo" alt="Logo" />
-      <List>
-        <ListItem button component={Link} to="/proyecto">
-          <ListItemText primary="Proyecto" />
-        </ListItem>
-        <ListItem button component={Link} to="/territorios">
-          <ListItemText primary="Territorios" />
-        </ListItem>
-        <ListItem button component={Link} to="/biodiversidad">
-          <ListItemText primary="Biodiversidad" />
-        </ListItem>
-        <ListItem button component={Link} to="/Variabilidad">
-          <ListItemText primary="Variabilidad climática" />
-        </ListItem>
-        <ListItem button component={Link} to="/indicadores-climaticos">
-          <ListItemText primary="Indicadores climáticos" />
-        </ListItem>
-      </List>
+      <DrawerMenu items={itemsToShow} onClick={handleDrawerToggle} />
+      {role === "admin" && <LogoutButton onLogout={logout} />}
     </Box>
   );
 
@@ -78,47 +65,10 @@ function MyNavbar() {
               Territorio, comida y vida
             </Typography>
           </Box>
+
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/proyecto"
-              sx={{ color: "#8B0000", fontWeight: "bold" }}
-            >
-              Proyecto
-            </Button>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/territorios"
-              sx={{ color: "#8B0000", fontWeight: "bold" }}
-            >
-              Territorio
-            </Button>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/biodiversidad"
-              sx={{ color: "#8B0000", fontWeight: "bold" }}
-            >
-              Biodiversidad
-            </Button>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/Variabilidad"
-              sx={{ color: "#8B0000", fontWeight: "bold" }}
-            >
-              Variabilidad climática
-            </Button>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/indicadores-climaticos"
-              sx={{ color: "#8B0000", fontWeight: "bold" }}
-            >
-              Adaptación
-            </Button>
+            <MenuButtons items={itemsToShow} />
+            {role === "admin" && <LogoutButton onLogout={logout} />}
           </Box>
         </Toolbar>
         <Box
@@ -130,9 +80,7 @@ function MyNavbar() {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
+          ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../services/authService";
+import { login as loginService } from "../../services/authService";
 import "./login.css";
-
+import { useAuth } from "./useAuth";
 // Función simple para decodificar el payload del JWT
 function parseJwt(token: string) {
   try {
@@ -18,16 +18,16 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth(); // <-- dentro del componente
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const res = await login(email, password);
+      const res = await loginService(email, password);
       const { token } = res;
-      localStorage.setItem("token", token);
-
+      login(token); // <-- solo esto, sin localStorage.setItem
       const payload = parseJwt(token);
       const role = payload?.role;
 
@@ -41,6 +41,10 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRegister = () => {
+    navigate("/register");
   };
 
   return (
@@ -75,6 +79,16 @@ const Login = () => {
         <button className="login-btn" type="submit" disabled={loading}>
           {loading ? "Entrando..." : "Entrar"}
         </button>
+        <div className="login-register-link">
+          <span>¿No tienes cuenta?</span>
+          <button
+            type="button"
+            className="login-register-btn"
+            onClick={handleRegister}
+          >
+            Registrarse
+          </button>
+        </div>
       </form>
     </div>
   );

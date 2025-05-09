@@ -3,9 +3,11 @@ import HomePage from "../Pages/HomePage/HomePage";
 import Proyecto from "../Pages/proyecto";
 import Biodiversidad from "../Pages/Biodiversidad/Biodiversidad";
 import Variabilidad from "../Pages/Variabilidad-C/Variabilidad";
-import LoginPage from "../Pages/login";
+import LoginPage from "../Pages/auth/login";
 import AdminPage from "../Pages/Admin/Admin";
 //import UsuarioPage from "../Pages/UsuarioPage";
+import ProtectedRoute from "../components/security/ProtectedRoute";
+import Register from "../components/register/register";
 
 const AppRoutes = () => (
   <Routes>
@@ -15,7 +17,16 @@ const AppRoutes = () => (
     <Route path="/Variabilidad" element={<Variabilidad />} />
     <Route path="/home" element={<HomePage />} />
     <Route path="/login" element={<LoginPage />} />
-    <Route path="/admin" element={<AdminPage />} />
+    <Route path="/register" element={<Register />} />
+
+    <Route
+      path="/admin"
+      element={
+        <ProtectedRoute adminOnly={true}>
+          <AdminPage />
+        </ProtectedRoute>
+      }
+    />
     {/* <Route path="/usuario" element={<UsuarioPage />} /> */}
   </Routes>
 );
