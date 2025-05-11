@@ -1,9 +1,6 @@
 
 
-html, body {
-  height: 100%;
-  margin: 0;
-}
+
 
 .app-container {
   display: flex;
@@ -78,27 +75,6 @@ html, body {
   right: 10px;
 }
 
-
-
-.bdy2{
-
-  width: 60%;
-  position: relative;
-  margin-left: 30%;
-}
-
-.bdy3{
-  width:85%;
-  margin: 0 auto;
-  max-width: 40%;
-  margin-right: 20%;
-}
-.bdy4{
-  top:0%;
-  max-width: 40%;
-  position: relative;
-  margin-right: 20%;
-}
 .cont{
   width:90%;
   margin: 0 auto;

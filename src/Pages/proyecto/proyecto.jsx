@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getContenido } from "../services/section";
-import Section from "../components/SectionData/Section";
+import { getContenido } from "../../services/section";
+import Section from "../../components/SectionData/Section";
 
 function Proyecto() {
   const [sections, setSections] = useState([]);

@@ -41,9 +41,7 @@ const Footer = () => {
             <FaLinkedin />
           </a>
         </div>
-        <p className="footer-copy">
-          &copy; 2024 Your Company. All Rights Reserved.
-        </p>
+        <p className="footer-copy">&copy; 2024 Territorio Comida, Vida @.</p>
       </div>
     </footer>
   );

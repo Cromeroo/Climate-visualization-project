@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Map from "../../Mapa/Map";
 import LayerSelector2 from "../../Mapa/LayerSelector2";
 import { IconButton } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
-import Section from "../../components/section";
-import Contribu from "../../components/Contributors/contribu";
 
 function Variabilidad() {
   const [layerType, setLayerType] = useState("coords");

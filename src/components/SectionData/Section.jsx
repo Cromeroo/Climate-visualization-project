@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import ReactMarkdown from "react-markdown";
 
 const SectionContainer = styled(motion.div)`
   padding: 20px;
@@ -30,7 +31,15 @@ const Title = styled.h2`
 const Separator = styled.div`
   height: 18px;
 `;
-
+const MarkdownImage = styled.img`
+  display: block;
+  margin: 2rem auto;
+  max-width: 90%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0002;
+  object-fit: contain;
+`;
 const Content = styled.p`
   white-space: pre-wrap;
   text-align: justify;
@@ -50,7 +59,14 @@ const Section = ({ title, content, image }) => (
   >
     <Title>{title}</Title>
     <Separator />
-    <Content>{content}</Content>
+    <ReactMarkdown
+      components={{
+        p: ({ node, ...props }) => <Content {...props} />,
+        img: ({ node, ...props }) => <MarkdownImage {...props} />,
+      }}
+    >
+      {content}
+    </ReactMarkdown>
   </SectionContainer>
 );
 

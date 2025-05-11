@@ -6,6 +6,9 @@ const SECCIONES = [
   { value: "proyecto", label: "Proyecto" },
   { value: "biodiversidad", label: "Biodiversidad" },
   { value: "variabilidad", label: "Variabilidad" },
+  { value: "territorios", label: "Territorios" },
+  { value: "adaptacion", label: "Adaptación" },
+
   // Agrega aquí más secciones si las tienes
 ];
 

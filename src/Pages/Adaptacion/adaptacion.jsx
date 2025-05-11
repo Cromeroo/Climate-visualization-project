@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { getContenido } from "../../services/section";
 import Section from "../../components/SectionData/Section";
 
-function Territorios() {
+function Adaptacion() {
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getContenido("territorios")
+    getContenido("adaptacion")
       .then((data) => {
         setSections(
           data.map((item) => ({
@@ -37,4 +37,4 @@ function Territorios() {
   );
 }
 
-export default Territorios;
+export default Adaptacion;

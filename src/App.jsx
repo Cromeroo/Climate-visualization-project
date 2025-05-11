@@ -10,8 +10,8 @@ import { AuthProvider } from "./components/login/authcontext.jsx";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <div className="app-container">
           <Navbar />
           <div className="content">
@@ -19,8 +19,8 @@ function App() {
           </div>
           <Footer />
         </div>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
