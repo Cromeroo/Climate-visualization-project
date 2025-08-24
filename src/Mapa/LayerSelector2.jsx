@@ -9,7 +9,8 @@ const StyledLayerSelector = styled.div`
   border-radius: 10px;
   text-align: left;
   width: 100%;
-  max-width: 98%;
+  max-width: 350px; /* Límite fijo para evitar expansión excesiva */
+  min-width: 300px; /* Ancho mínimo para legibilidad */
   margin: 10px auto;
   background-color: #ffffff;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
@@ -20,6 +21,7 @@ const StyledLayerSelector = styled.div`
   @media (max-width: 768px) {
     padding: 15px;
     width: 95%;
+    max-width: 320px;
     margin: 10px auto;
     max-height: 70vh;
   }
@@ -27,6 +29,7 @@ const StyledLayerSelector = styled.div`
   @media (max-width: 480px) {
     padding: 10px;
     width: 90%;
+    max-width: 280px;
     top: 20px;
     left: 5%;
     max-height: 60vh;
@@ -62,19 +65,24 @@ const StyledFormCheck = styled(FormCheck)`
 `;
 
 const GroupTitle = styled.div`
-  font-size: 18px;
+  font-size: 16px; /* Reducido para nombres largos */
   font-weight: bold;
   color: #555;
   cursor: pointer;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start; /* Alineación superior para títulos multilinea */
+  line-height: 1.3; /* Mejor espaciado entre líneas */
+  word-wrap: break-word; /* Permite romper palabras largas */
+  hyphens: auto; /* Separación silábica automática */
 
   &:after {
     content: "${(props) => (props.$isOpen ? "▲" : "▼")}";
     font-size: 12px;
-    margin-left: 10px;
+    margin-left: 8px;
+    flex-shrink: 0; /* Evita que el ícono se reduzca */
+    margin-top: 2px; /* Pequeño ajuste vertical */
   }
 `;
 
@@ -99,7 +107,6 @@ const StyledButton = styled(Button)`
 
 function LayerSelector({
   layerType,
-  changeLayer,
   isLayerVisible,
   setIsLayerVisible,
   onVisibilityChange,
@@ -108,12 +115,38 @@ function LayerSelector({
   const [openGroups, setOpenGroups] = useState({});
 
   const capasDeseadas = {
-    CapaBase: ["Resguardos", "Departamentos", "Mpiosparticipación"],
-    Actual: ["A1", "A12"],
-    SSP126: ["A1ssp126", "A12ssp126"],
-    SSP245: ["A1ssp245", "A12ssp245"],
-    SSP370: ["A1ssp370", "A12ssp370"],
-    SSP585: ["A1ssp585", "A12ssp585"],
+    "Capa Base": ["Resguardos", "Departamentos", "Mpiosparticipación"],
+    "Clima actual": ["A1", "A12"],
+    "Proyección climática futura: Sustainable Development": [
+      "A1ssp126",
+      "A12ssp126",
+    ],
+    "Proyección climática futura: Middle of the Road": [
+      "A1ssp245",
+      "A12ssp245",
+    ],
+    "Proyección climática futura: Regional Rivalry": ["A1ssp370", "A12ssp370"],
+    "Proyección climática futura: Fossil-fueled Development": [
+      "A1ssp585",
+      "A12ssp585",
+    ],
+  };
+
+  // Mapeo de nombres internos a nombres para mostrar
+  const layerDisplayNames = {
+    A1: "Temperatura media anual",
+    A12: "Precipitación acumulada anual",
+    A1ssp126: "Temperatura media anual proyectada.",
+    A12ssp126: "Precipitación acumulada anual proyectada",
+    A1ssp245: "Temperatura media anual proyectada.",
+    A12ssp245: "Precipitación acumulada anual proyectada.",
+    A1ssp370: "Temperatura media anual proyectada.",
+    A12ssp370: "Precipitación acumulada anual proyectada.",
+    A1ssp585: "Temperatura media anual proyectada.",
+    A12ssp585: "Precipitación acumulada anual proyectada.",
+    Resguardos: "Resguardos",
+    Departamentos: "Departamentos",
+    Mpiosparticipación: "Mpiosparticipación",
   };
 
   const handleGroupToggle = (groupName) => {
@@ -128,15 +161,6 @@ function LayerSelector({
       ...prevState,
       [layerName]: isVisible,
     }));
-  };
-
-  const handleLayerChange = (e) => {
-    const newLayerType = e.target.value;
-    const layerName = e.target.value;
-    const isChecked = e.target.checked;
-    changeLayer(e);
-    onVisibilityChange(newLayerType, isChecked);
-    handleVisibilityChange(layerName, isChecked);
   };
 
   const handleDeselectAll = () => {
@@ -168,7 +192,7 @@ function LayerSelector({
                     <StyledFormCheck
                       key={layerId}
                       type="checkbox"
-                      label={layerId}
+                      label={layerDisplayNames[layerId] || layerId}
                       checked={isLayerVisible[layerId] || false}
                       onChange={(e) =>
                         handleVisibilityChange(layerId, e.target.checked)
