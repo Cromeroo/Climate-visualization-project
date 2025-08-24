@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "../Pages/HomePage/HomePage";
 import Proyecto from "../Pages/proyecto/proyecto";
 import Biodiversidad from "../Pages/Biodiversidad/Biodiversidad";
@@ -9,12 +9,12 @@ import UsuariosAdmin from "../Pages/Admins_Users/usuariosAdmin";
 //import UsuarioPage from "../Pages/UsuarioPage";
 import ProtectedRoute from "../components/security/ProtectedRoute";
 import Register from "../components/register/register";
-import Territorios from "../Pages/Territorios/territorios";
+import Territorios from "../Pages/Territorios/Territorios";
 import Adaptacion from "../Pages/Adaptacion/adaptacion";
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<HomePage />} />
+    <Route path="/" element={<Navigate to="/proyecto" replace />} />
     <Route path="/proyecto" element={<Proyecto />} />
     <Route path="/biodiversidad" element={<Biodiversidad />} />
     <Route path="/Variabilidad" element={<Variabilidad />} />
