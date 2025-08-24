@@ -9,7 +9,7 @@ import UsuariosAdmin from "../Pages/Admins_Users/usuariosAdmin";
 //import UsuarioPage from "../Pages/UsuarioPage";
 import ProtectedRoute from "../components/security/ProtectedRoute";
 import Register from "../components/register/register";
-import Territorios from "../Pages/Territorios/Territorios";
+import Territorios from "../Pages/Territorios/territorios";
 import Adaptacion from "../Pages/Adaptacion/adaptacion";
 
 const AppRoutes = () => (
