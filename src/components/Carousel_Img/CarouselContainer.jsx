@@ -17,7 +17,7 @@ const CarouselContainer = styled.div`
 
   .slick-dots {
     bottom: -30px;
-    position: absolute;
+    position: static;
     width: 100%;
     display: flex;
     justify-content: center;
